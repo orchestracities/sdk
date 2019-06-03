@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: v2-RC-2018.07
+  version: 0.2.2
   title: ngsi-v2
   description: NGSI V2 API RC-2018.07
   license:
@@ -75,6 +75,16 @@ paths:
         - Entities
       operationId: List entities
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: id
           in: query
           required: false
@@ -228,6 +238,16 @@ paths:
         - Entities
       operationId: Create entity
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: options
           in: query
           required: false
@@ -288,6 +308,16 @@ paths:
         - Entities
       operationId: Retrieve entity
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -362,6 +392,16 @@ paths:
         - Entities
       operationId: Remove entity
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -406,6 +446,16 @@ paths:
         - Entities
       operationId: Retrieve entity attributes
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -485,6 +535,16 @@ paths:
         - Entities
       operationId: Replace all entity attributes
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -547,6 +607,16 @@ paths:
         - Entities
       operationId: Update or append entity attributes
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -602,6 +672,16 @@ paths:
         - Entities
       operationId: Update existing entity attributes
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -654,6 +734,16 @@ paths:
         - Attributes
       operationId: Get attribute data
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -719,6 +809,16 @@ paths:
         - Attributes
       operationId: Update attribute data
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -765,6 +865,16 @@ paths:
         - Attributes
       operationId: Remove a single attribute
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -824,6 +934,16 @@ paths:
         - Attribute Value
       operationId: Get attribute value
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -897,6 +1017,16 @@ paths:
         - Attribute Value
       operationId: Update attribute value
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityId
           in: path
           required: true
@@ -969,6 +1099,16 @@ paths:
         - Types
       operationId: Retrieve entity types
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: limit
           in: query
           required: false
@@ -1031,6 +1171,16 @@ paths:
         - Types
       operationId: Retrieve entity type
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: entityType
           in: path
           required: true
@@ -1066,6 +1216,16 @@ paths:
         - Subscriptions
       operationId: Retrieve subscriptions
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: limit
           in: query
           required: false
@@ -1120,6 +1280,17 @@ paths:
       tags:
         - Subscriptions
       operationId: Create a new subscription
+      parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
       requestBody:
         $ref: "#/components/requestBodies/Subscription"
       responses:
@@ -1155,6 +1326,16 @@ paths:
         - Subscriptions
       operationId: Retrieve subscription
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: subscriptionId
           in: path
           required: true
@@ -1189,6 +1370,16 @@ paths:
         - Subscriptions
       operationId: Delete subscription
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: subscriptionId
           in: path
           required: true
@@ -1219,6 +1410,16 @@ paths:
         - Subscriptions
       operationId: Update subscription
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: subscriptionId
           in: path
           required: true
@@ -1244,6 +1445,16 @@ paths:
         - Registrations
       operationId: Retrieve registrations
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: limit
           in: query
           required: false
@@ -1298,6 +1509,17 @@ paths:
       tags:
         - Registrations
       operationId: Create registrations
+      parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
       requestBody:
         $ref: "#/components/requestBodies/Registration"
       responses:
@@ -1331,6 +1553,16 @@ paths:
         - Registrations
       operationId: Retrieve registration
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: registrationId
           in: path
           required: true
@@ -1368,6 +1600,16 @@ paths:
         - Registrations
       operationId: Update registration
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: registrationId
           in: path
           required: true
@@ -1400,6 +1642,16 @@ paths:
         - Registrations
       operationId: Delete registration
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: registrationId
           in: path
           required: true
@@ -1441,6 +1693,16 @@ paths:
         - Batch Operations
       operationId: Update
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: options
           in: query
           required: false
@@ -1513,6 +1775,16 @@ paths:
         - Batch Operations
       operationId: Query
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: limit
           in: query
           required: false
@@ -1624,6 +1896,16 @@ paths:
         - Batch Operations
       operationId: Notify
       parameters:
+        - in: header
+          name: Fiware-Service
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: Fiware-ServicePath
+          schema:
+            type: string
+          required: false
         - name: options
           in: query
           required: false
