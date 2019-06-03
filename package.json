@@ -40,13 +40,13 @@
   },
   "scripts": {
     "lint": "eslint . --cache --fix",
-    "lint:text": "textlint 'README.md' '../specs/*.md' '../specs/**/*.md'",
-    "lint:md": "remark -f 'README.md' '../specs'",
+    "lint:text": "textlint 'README.md' './specs/*.md' './specs/**/*.md'",
+    "lint:md": "remark -f 'README.md' './specs'",
     "precommit": "lint-staged",
     "prettier": "prettier --single-quote --trailing-comma es5 --write **/*.js *.js",
-    "prettier:text": "prettier '../*.md' '../specs/*.md' '../specs/**/*.md' --tab-width 4 --print-width 80 --write --prose-wrap always",
+    "prettier:text": "prettier './*.md' './specs/*.md' './specs/**/*.md' --tab-width 4 --print-width 80 --write --prose-wrap always",
     "start": "mkdocs serve",
-    "test": "textlint '../README.md' 'README.md' '../specs/*.md' '../specs/**/*.md'",
+    "test": "textlint './README.md' 'README.md' './specs/*.md' './specs/**/*.md'",
     "swagger-cli:validate": "swagger-cli validate"
   },
   "husky": {
