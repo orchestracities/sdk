@@ -16,7 +16,8 @@ jobs:
         - flake8 . --count --select=E,F821,F822,F823 --max-line-length=127 --show-source --statistics
         # exit-zero treats all errors as warnings.  GitHub editor is 127 chars wide
         - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      # install:
+      install:
+        - npm install
       #   - sudo apt-get remove -y docker docker-engine docker.io
       #   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
       #   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -43,9 +44,8 @@ jobs:
         - flake8 . --count --select=E,F821,F822,F823 --max-line-length=127 --show-source --statistics
         # exit-zero treats all errors as warnings.  GitHub editor is 127 chars wide
         - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      # install:
-      #   ## Data model validator
-      #   - npm install -C ./validator
+      install:
+        - npm install
       #   - sudo apt-get remove -y docker docker-engine docker.io
       #   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
       #   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -66,8 +66,8 @@ jobs:
       language: node_js
       node_js: 10
 
-      #install:
-      #  - npm install -C ./validator
+      install:
+        - npm install
 
       script:
         - npm run lint:md
