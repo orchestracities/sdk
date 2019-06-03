@@ -1,0 +1,68 @@
+{
+  "name": "ngsi-sdk",
+  "version": "0.0.1",
+  "description": "An SDK for NGSI v2",
+  "keywords": [
+    "node",
+    "fiware",
+    "ngsi"
+  ],
+  "license": "APACHE 2.0",
+  "author": "Federico Facca <name.surname@martel-innovate.com> (https://martel-innovate.com)",
+  "contributors": [
+    "N/A"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orchestracities/sdk"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "eslint-config-tamia": "^6.0.1",
+    "eslint-plugin-prettier": "^3.0.0",
+    "husky": "^1.1.0",
+    "jest": "^23.6.0",
+    "lint-staged": "^7.3.0",
+    "memfs": "2.10.1",
+    "prettier": "^1.14.2",
+    "remark-cli": "^6.0.1",
+    "remark-preset-lint-recommended": "^3.0.2",
+    "textlint": "^11.2.5",
+    "textlint-filter-rule-comments": "^1.2.2",
+    "textlint-rule-common-misspellings": "^1.0.1",
+    "textlint-rule-no-dead-link": "^4.4.1",
+    "textlint-rule-terminology": "^1.1.29",
+    "textlint-rule-write-good": "^1.6.2",
+    "swagger-cli": "^2.2.1"
+  },
+  "engines": {
+    "node": ">=8.6"
+  },
+  "scripts": {
+    "lint": "eslint . --cache --fix",
+    "lint:text": "textlint 'README.md' '../specs/*.md' '../specs/**/*.md'",
+    "lint:md": "remark -f 'README.md' '../specs'",
+    "precommit": "lint-staged",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write **/*.js *.js",
+    "prettier:text": "prettier '../*.md' '../specs/*.md' '../specs/**/*.md' --tab-width 4 --print-width 80 --write --prose-wrap always",
+    "start": "mkdocs serve",
+    "test": "textlint '../README.md' 'README.md' '../specs/*.md' '../specs/**/*.md'",
+    "swagger-cli:validate": "swagger-cli validate"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --parser flow --single-quote --trailing-comma es5 --write",
+      "git add"
+    ],
+    "*.md": [
+      "prettier --tab-width 4 --print-width 80 --write --prose-wrap always",
+      "git add"
+    ]
+  }
+}
