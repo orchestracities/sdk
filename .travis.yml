@@ -30,7 +30,8 @@ jobs:
       #  - npm run lint
         - sh validate-specs.sh
 
-      # script:
+      script:
+        - echo "ok"
       #    - node ./validator/validate.js -i common-schema.json -i geometry-schema.json -i specs/Weather/weather-schema.json -i specs/Alert/alert-schema.json -i specs/AgriFood/agrifood-schema.json -p specs -c true
 
     - stage: test
@@ -58,7 +59,8 @@ jobs:
       #  - npm run lint
         - sh validate-specs.sh
       # 
-      # script:
+      script:
+        - echo "ok"
       #    - node ./validator/validate.js -i common-schema.json -i geometry-schema.json -i specs/Weather/weather-schema.json -i specs/Alert/alert-schema.json -i specs/AgriFood/agrifood-schema.json -p specs -c true
 
     - stage: test
