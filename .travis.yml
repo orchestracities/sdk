@@ -72,7 +72,7 @@ jobs:
         - npm install
 
       script:
-        - sh test-javascript.sh
+        - test-javascript.sh
 
     - stage: test
       name: "Documentation Tests"
