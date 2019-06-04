@@ -60,8 +60,8 @@ jobs:
       node_js: 10
 
       before_install:
-        - sudo add-apt-repository ppa:rmescandon/yq
-        - sudo apt update
+        - sudo add-apt-repository ppa:rmescandon/yq -y
+        - sudo apt update -y
         - sudo apt install yq -y
 
       install:
