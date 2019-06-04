@@ -58,13 +58,13 @@ prompt.get(properties, function(err, result) {
     if (!error && response.statusCode === 200) {
       var json = JSON.parse(body);
       var token = json['access_token'];
-      Console.log('scope: ' + json['scope']);
-      Console.log('token: ' + token);
+      console.log('scope: ' + json['scope']);
+      console.log('token: ' + token);
       testAPI(token, result.apiKey);
       return 1;
     } else {
-      Console.error('invalid user/password');
-      Console.error('status code:' + response.statusCode);
+      console.error('invalid user/password');
+      console.error('status code:' + response.statusCode);
       return 1;
     }
   });
@@ -72,7 +72,7 @@ prompt.get(properties, function(err, result) {
 });
 
 function onErr(err) {
-  Console.log(err);
+  console.log(err);
   return 1;
 }
 
@@ -91,9 +91,9 @@ function testAPI(token, apiKey) {
   let apiInstance = new NgsiV2.APIEntryPointApi();
   apiInstance.retrieveAPIResources((error, data, response) => {
     if (error) {
-      Console.error(error);
+      console.error(error);
     } else {
-      Console.log(
+      console.log(
         'API called successfully. Returned data: ' + JSON.stringify(data)
       );
     }
@@ -106,9 +106,9 @@ function testAPI(token, apiKey) {
   };
   apiInstance.listEntities(opts, (error, data, response) => {
     if (error) {
-      Console.error(error);
+      console.error(error);
     } else {
-      Console.log(
+      console.log(
         'API called successfully. Returned data: ' + JSON.stringify(data)
       );
     }
@@ -131,9 +131,9 @@ function testAPI(token, apiKey) {
     opts,
     (error, data, response) => {
       if (error) {
-        Console.error(error);
+        console.error(error);
       } else {
-        Console.log(
+        console.log(
           'API called successfully. Returned data: ' + JSON.stringify(data)
         );
       }
@@ -148,9 +148,9 @@ function testAPI(token, apiKey) {
     opts,
     (error, data, response) => {
       if (error) {
-        Console.error(error);
+        console.error(error);
       } else {
-        Console.log(
+        console.log(
           'API called successfully. Returned data: ' + JSON.stringify(data)
         );
       }
