@@ -76,4 +76,3 @@ jobs:
 
       script:
         - npm run lint:md
-        - npm run lint:text
