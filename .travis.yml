@@ -58,13 +58,14 @@ jobs:
       name: "Unit Tests nodeJS"
       language: node_js
       node_js: 10
+      rvm: 1.9.2
 
       install:
         - npm install
 
       script:
         - npm run lint
-        # - bash test-javascript.sh
+        - bash test-javascript.sh
 
     - stage: test
       name: "Documentation Tests"

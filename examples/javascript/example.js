@@ -61,14 +61,14 @@ prompt.get(properties, function(err, result) {
       console.log('scope: ' + json['scope']);
       console.log('token: ' + token);
       testAPI(token, result.apiKey);
-      return 1;
+      return 0;
     } else {
       console.error('invalid user/password');
       console.error('status code:' + response.statusCode);
       return 1;
     }
   });
-  return 1;
+  return 0;
 });
 
 function onErr(err) {
