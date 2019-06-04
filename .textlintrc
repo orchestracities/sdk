@@ -1,4 +1,9 @@
 {
+  "filters": {
+    "node-types": {
+      "nodeTypes": ["BlockQuote"]
+    }
+  },
   "rules": {
     "terminology": {
       "defaultTerms": false,
@@ -184,11 +189,6 @@
       "tooWordy": false,
       "weasel": false,
       "so": false
-    },
-    "filters": {
-      "node-types": {
-        "nodeTypes": ["BlockQuote"]
-      }
     },
     "no-dead-link": {
        "ignoreRedirects": true,

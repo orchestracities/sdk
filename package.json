@@ -32,11 +32,11 @@
     "swagger-cli": "^2.2.1",
     "textlint": "^11.2.5",
     "textlint-filter-rule-comments": "^1.2.2",
+    "textlint-filter-rule-node-types": "^1.0.1",
     "textlint-rule-common-misspellings": "^1.0.1",
     "textlint-rule-no-dead-link": "^4.4.1",
     "textlint-rule-terminology": "^1.1.29",
-    "textlint-rule-write-good": "^1.6.2",
-    "textlint-filter-rule-node-types": "^1.0.1"
+    "textlint-rule-write-good": "^1.6.2"
   },
   "engines": {
     "node": ">=8.6"
