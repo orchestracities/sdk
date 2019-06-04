@@ -185,10 +185,16 @@
       "weasel": false,
       "so": false
     },
+    "filters": {
+      "node-types": {
+        "nodeTypes": ["BlockQuote"]
+      }
+    },
     "no-dead-link": {
        "ignoreRedirects": true,
        "ignore": [
-          "mailto:*"
+          "mailto:*",
+          "https://github.com/GIT_USER_ID/GIT_REPO_ID"
       ]
     }
   }
