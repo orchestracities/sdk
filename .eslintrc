@@ -7,6 +7,10 @@
   "extends": "eslint:recommended",
   "rules": {
     "valid-jsdoc": 0,
-    "no-unused-vars": 0
+    "no-unused-vars": 2,
+    "no-undef": 2
+  },
+  "parserOptions": {
+      "sourceType": "module"
   }
 }
