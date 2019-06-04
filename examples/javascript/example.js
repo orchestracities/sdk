@@ -20,9 +20,6 @@ var properties = [
     name: 'clientSecret',
     hidden: true,
   },
-  {
-    name: 'scope',
-  },
 ];
 
 prompt.start();
@@ -44,8 +41,8 @@ prompt.get(properties, function(err, result) {
   var form = {
     username: result.username,
     password: result.password,
-    client_id: 'resource_server',
-    client_secret: '006ce147-dd78-42db-a78a-1b5b0f3a723f',
+    client_id: result.clientId,
+    client_secret: result.clientSecret,
     grant_type: 'password',
     scope: 'entity:create entity:read',
   };
