@@ -16,23 +16,13 @@ jobs:
         - flake8 . --count --select=E,F821,F822,F823 --max-line-length=127 --show-source --statistics
         # exit-zero treats all errors as warnings.  GitHub editor is 127 chars wide
         - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      #install:
-      #  - npm install
-      #   - sudo apt-get remove -y docker docker-engine docker.io
-      #   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-      #   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      #   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      #   - sudo apt-get -qq update
-      #   - sudo apt-get install -y docker-ce
-      #   - docker run --name mongodb -d mongo:3.6
-      #   - docker run -d --name orion1 --link mongodb:mongodb -p 1026:1026 fiware/orion -dbhost mongodb
+
+      # install:
+
       # before_script:
-      #   # - npm run lint
-      #   # - sh validate-specs.sh
 
       script:
-        - echo "ok"
-      #    - node ./validator/validate.js -i common-schema.json -i geometry-schema.json -i specs/Weather/weather-schema.json -i specs/Alert/alert-schema.json -i specs/AgriFood/agrifood-schema.json -p specs -c true
+        - echo "ok" #should launch pyhton tests
 
     - stage: test
       name: "Unit Tests 3.7"
@@ -45,23 +35,13 @@ jobs:
         - flake8 . --count --select=E,F821,F822,F823 --max-line-length=127 --show-source --statistics
         # exit-zero treats all errors as warnings.  GitHub editor is 127 chars wide
         - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      #install:
-      #  - npm install
-      #   - sudo apt-get remove -y docker docker-engine docker.io
-      #   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-      #   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-      #   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-      #   - sudo apt-get -qq update
-      #   - sudo apt-get install -y docker-ce
-      #   - docker run --name mongodb -d mongo:3.4
-      #   - docker run -d --name orion1 --link mongodb:mongodb -p 1026:1026 fiware/orion -dbhost mongodb
+
+      # install:
+
       # before_script:
-      #   - npm run lint
-      #   - sh validate-specs.sh
-      # 
+
       script:
-        - echo "ok"
-      #    - node ./validator/validate.js -i common-schema.json -i geometry-schema.json -i specs/Weather/weather-schema.json -i specs/Alert/alert-schema.json -i specs/AgriFood/agrifood-schema.json -p specs -c true
+        - echo "ok" #should launch pyhton tests
 
     - stage: test
       name: "Specs Tests"
