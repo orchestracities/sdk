@@ -1,8 +1,16 @@
 openapi: 3.0.0
+tags:
+  - name: FIWARE
+  - name: NGSI
+  - name: Orion Context Broker
 info:
   version: 0.2.2
   title: ngsi_v2
   description: NGSI V2 API RC-2018.07
+  contact:
+    name: OrchestraCities
+    url: https://www.orchestracities.com
+    email: info@orchestracities.com
   license:
     name: Apache 2.0
     url: https://github.com/orchestracities/sdk/blob/master/LICENSE
@@ -22,7 +30,7 @@ paths:
         - API Entry Point
       operationId: Retrieve API Resources
       responses:
-        "200":
+        '200':
           description: ""
           headers:
             Content-Type:
@@ -40,13 +48,13 @@ paths:
                     types_url: /v2/types
                     subscriptions_url: /v2/subscriptions
                     registrations_url: /v2/registrations
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -85,11 +93,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: id
           in: query
@@ -205,7 +221,7 @@ paths:
               - values
               - unique
       responses:
-        "200":
+        '200':
           description: List of entities
           content:
             application/json:
@@ -213,13 +229,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Entity"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -247,11 +263,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: options
           in: query
@@ -269,27 +293,27 @@ paths:
               $ref: "#/components/schemas/Entity"
         required: true
       responses:
-        "201":
+        '201':
           description: When upsert option is not used
           headers:
             Location:
               description: URL of the created entity.
               schema:
                 type: string
-        "204":
+        '204':
           description: If upsert option is used
           headers:
             Location:
               description: URL of the created entity.
               schema:
                 type: string
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -322,11 +346,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -370,7 +402,7 @@ paths:
               - values
               - unique
       responses:
-        "200":
+        '200':
           description: Single Entity
           headers:
             Content-Type:
@@ -381,13 +413,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Entity"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -412,11 +444,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -433,15 +473,15 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -472,11 +512,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -520,7 +568,7 @@ paths:
               - values
               - unique
       responses:
-        "200":
+        '200':
           description: Attributes of an Entity
           headers:
             Content-Type:
@@ -531,13 +579,13 @@ paths:
             application/json:
               schema:
                 type: object
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -567,11 +615,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -599,15 +655,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -645,11 +701,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -677,15 +741,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -716,11 +780,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -747,15 +819,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -784,11 +856,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -819,7 +899,7 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Attribute of an Entity
           headers:
             Content-Type:
@@ -830,13 +910,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Attribute"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -865,11 +945,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -894,15 +982,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttribute"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -927,11 +1015,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -954,15 +1050,15 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1002,11 +1098,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -1029,7 +1133,7 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Attribute Value of an Entity
           content:
             application/json:
@@ -1038,13 +1142,13 @@ paths:
             plain/text:
               schema:
                 $ref: "#/components/schemas/AttributeValuePlain"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1088,11 +1192,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityId
           in: path
@@ -1124,15 +1236,15 @@ paths:
               $ref: "#/components/schemas/AttributeValuePlain"
         required: true
       responses:
-        "200":
+        '200':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1175,11 +1287,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: limit
           in: query
@@ -1203,7 +1323,7 @@ paths:
               - count
               - values
       responses:
-        "200":
+        '200':
           description: List of EntityType
           content:
             application/json:
@@ -1211,13 +1331,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/EntityType"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1251,11 +1371,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: entityType
           in: path
@@ -1264,19 +1392,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: EntityType
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/EntityTypeBody"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1302,11 +1430,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: limit
           in: query
@@ -1329,7 +1465,7 @@ paths:
             enum:
               - count
       responses:
-        "200":
+        '200':
           description: ""
           content:
             application/json:
@@ -1337,13 +1473,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Subscription"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1371,29 +1507,37 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
       requestBody:
         $ref: "#/components/requestBodies/updateSubscription"
       responses:
-        "201":
+        '201':
           description: ""
           headers:
             Location:
               description: URL of the created subscription.
               schema:
                 type: string
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1422,11 +1566,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: subscriptionId
           in: path
@@ -1435,19 +1587,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: ""
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Subscription"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1472,11 +1624,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: subscriptionId
           in: path
@@ -1485,15 +1645,15 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1518,11 +1678,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: subscriptionId
           in: path
@@ -1533,15 +1701,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateSubscription"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1559,11 +1727,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: limit
           in: query
@@ -1586,7 +1762,7 @@ paths:
             enum:
               - count
       responses:
-        "200":
+        '200':
           description: ""
           content:
             application/json:
@@ -1594,13 +1770,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Registration"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1628,29 +1804,37 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
       requestBody:
         $ref: "#/components/requestBodies/updateRegistration"
       responses:
-        "201":
+        '201':
           description: ""
           headers:
             Location:
               description: URL of the created registration.
               schema:
                 type: string
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1677,11 +1861,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: registrationId
           in: path
@@ -1690,19 +1882,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: ""
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Registration"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1730,11 +1922,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: registrationId
           in: path
@@ -1745,15 +1945,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateRegistration"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1778,11 +1978,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: registrationId
           in: path
@@ -1791,15 +1999,15 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1835,11 +2043,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: options
           in: query
@@ -1852,15 +2068,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/batchUpdate"
       responses:
-        "204":
+        '204':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1903,11 +2119,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: limit
           in: query
@@ -1943,7 +2167,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/batchQuery"
       responses:
-        "200":
+        '200':
           description: ""
           content:
             application/json:
@@ -1951,13 +2175,13 @@ paths:
                 type: array
                 items:
                    $ref: "#/components/schemas/Entity"
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:
@@ -1989,11 +2213,19 @@ paths:
           name: Fiware-Service
           schema:
             type: string
+          description: When "-multiservice" is used, Orion uses the
+            "Fiware-Service" HTTP header in the request to identify the
+            service/tenant. If the header is not present in the HTTP request,
+            the default service/tenant is used..
           required: false
         - in: header
           name: Fiware-ServicePath
           schema:
             type: string
+          description: Fiware-ServicePath is an optional header. It is assumed
+            that all the entities created without Fiware-ServicePath
+            (or that don't include service path information in the database)
+            belongs to a root scope "/" implicitely.
           required: false
         - name: options
           in: query
@@ -2006,15 +2238,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/batchNotify"
       responses:
-        "200":
+        '200':
           description: ""
-        "4xx":
+        '4XX':
           description: error payload
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "5xx":
+        '5XX':
           description: error payload
           content:
             application/json:

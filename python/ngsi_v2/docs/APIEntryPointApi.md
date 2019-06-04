@@ -94,8 +94,8 @@ This endpoint does not need any parameter.
 | Status code | Description   | Response headers                        |
 | ----------- | ------------- | --------------------------------------- |
 | **200**     |               | \* Content-Type - application/json <br> |
-| **4xx**     | error payload | -                                       |
-| **5xx**     | error payload | -                                       |
+| **4XX**     | error payload | -                                       |
+| **5XX**     | error payload | -                                       |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)

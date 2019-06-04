@@ -40,8 +40,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 let apiInstance = new NgsiV2.BatchOperationsApi();
 let batchNotify = new NgsiV2.BatchNotify(); // BatchNotify |
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     options: "options_example" // String | Options dictionary
 };
 apiInstance.notify(batchNotify, opts, (error, data, response) => {
@@ -55,12 +55,12 @@ apiInstance.notify(batchNotify, opts, (error, data, response) => {
 
 ### Parameters
 
-| Name                  | Type                              | Description        | Notes      |
-| --------------------- | --------------------------------- | ------------------ | ---------- |
-| **batchNotify**       | [**BatchNotify**](BatchNotify.md) |                    |
-| **fiwareService**     | **String**                        |                    | [optional] |
-| **fiwareServicePath** | **String**                        |                    | [optional] |
-| **options**           | **String**                        | Options dictionary | [optional] |
+| Name                  | Type                              | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **batchNotify**       | [**BatchNotify**](BatchNotify.md) |                                                                                                                                                                                                                                            |
+| **fiwareService**     | **String**                        | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String**                        | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **options**           | **String**                        | Options dictionary                                                                                                                                                                                                                         | [optional] |
 
 ### Return type
 
@@ -114,8 +114,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 let apiInstance = new NgsiV2.BatchOperationsApi();
 let batchQuery = new NgsiV2.BatchQuery(); // BatchQuery |
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     limit: 56, // Number | Limit the number of entities to be retrieved.
     offset: 56, // Number | Skip a number of records.
     orderBy: "orderBy_example", // String | Criteria for ordering results. See \"Ordering Results\" section for details.
@@ -132,15 +132,15 @@ apiInstance.query(batchQuery, opts, (error, data, response) => {
 
 ### Parameters
 
-| Name                  | Type                            | Description                                                                            | Notes      |
-| --------------------- | ------------------------------- | -------------------------------------------------------------------------------------- | ---------- |
-| **batchQuery**        | [**BatchQuery**](BatchQuery.md) |                                                                                        |
-| **fiwareService**     | **String**                      |                                                                                        | [optional] |
-| **fiwareServicePath** | **String**                      |                                                                                        | [optional] |
-| **limit**             | **Number**                      | Limit the number of entities to be retrieved.                                          | [optional] |
-| **offset**            | **Number**                      | Skip a number of records.                                                              | [optional] |
-| **orderBy**           | **String**                      | Criteria for ordering results. See \&quot;Ordering Results\&quot; section for details. | [optional] |
-| **options**           | **String**                      | Options dictionary                                                                     | [optional] |
+| Name                  | Type                            | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **batchQuery**        | [**BatchQuery**](BatchQuery.md) |                                                                                                                                                                                                                                            |
+| **fiwareService**     | **String**                      | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String**                      | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **limit**             | **Number**                      | Limit the number of entities to be retrieved.                                                                                                                                                                                              | [optional] |
+| **offset**            | **Number**                      | Skip a number of records.                                                                                                                                                                                                                  | [optional] |
+| **orderBy**           | **String**                      | Criteria for ordering results. See \&quot;Ordering Results\&quot; section for details.                                                                                                                                                     | [optional] |
+| **options**           | **String**                      | Options dictionary                                                                                                                                                                                                                         | [optional] |
 
 ### Return type
 
@@ -188,8 +188,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 let apiInstance = new NgsiV2.BatchOperationsApi();
 let batchUpdate = new NgsiV2.BatchUpdate(); // BatchUpdate |
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     options: "options_example" // String | Options dictionary
 };
 apiInstance.update(batchUpdate, opts, (error, data, response) => {
@@ -203,12 +203,12 @@ apiInstance.update(batchUpdate, opts, (error, data, response) => {
 
 ### Parameters
 
-| Name                  | Type                              | Description        | Notes      |
-| --------------------- | --------------------------------- | ------------------ | ---------- |
-| **batchUpdate**       | [**BatchUpdate**](BatchUpdate.md) |                    |
-| **fiwareService**     | **String**                        |                    | [optional] |
-| **fiwareServicePath** | **String**                        |                    | [optional] |
-| **options**           | **String**                        | Options dictionary | [optional] |
+| Name                  | Type                              | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **batchUpdate**       | [**BatchUpdate**](BatchUpdate.md) |                                                                                                                                                                                                                                            |
+| **fiwareService**     | **String**                        | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String**                        | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **options**           | **String**                        | Options dictionary                                                                                                                                                                                                                         | [optional] |
 
 ### Return type
 

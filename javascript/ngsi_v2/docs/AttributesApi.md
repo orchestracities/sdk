@@ -38,8 +38,8 @@ let apiInstance = new NgsiV2.AttributesApi();
 let entityId = "entityId_example"; // String | Id of the entity
 let attrName = "attrName_example"; // String | Name of the attribute to be retrieved.
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     type: "type_example", // String | Entity type, to avoid ambiguity in the case there are several entities with the same entity id.
     metadata: "metadata_example" // String | A list of metadata names to include in the response. See [Filtering out attributes and metadata](https://fiware.github.io/specifications/ngsiv2/stable) section for more detail.
 };
@@ -59,14 +59,14 @@ apiInstance.getAttributeData(
 
 ### Parameters
 
-| Name                  | Type       | Description                                                                                                                                                                      | Notes      |
-| --------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| **entityId**          | **String** | Id of the entity                                                                                                                                                                 |
-| **attrName**          | **String** | Name of the attribute to be retrieved.                                                                                                                                           |
-| **fiwareService**     | **String** |                                                                                                                                                                                  | [optional] |
-| **fiwareServicePath** | **String** |                                                                                                                                                                                  | [optional] |
-| **type**              | **String** | Entity type, to avoid ambiguity in the case there are several entities with the same entity id.                                                                                  | [optional] |
-| **metadata**          | **String** | A list of metadata names to include in the response. See [Filtering out attributes and metadata](https://fiware.github.io/specifications/ngsiv2/stable) section for more detail. | [optional] |
+| Name                  | Type       | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **entityId**          | **String** | Id of the entity                                                                                                                                                                                                                           |
+| **attrName**          | **String** | Name of the attribute to be retrieved.                                                                                                                                                                                                     |
+| **fiwareService**     | **String** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **type**              | **String** | Entity type, to avoid ambiguity in the case there are several entities with the same entity id.                                                                                                                                            | [optional] |
+| **metadata**          | **String** | A list of metadata names to include in the response. See [Filtering out attributes and metadata](https://fiware.github.io/specifications/ngsiv2/stable) section for more detail.                                                           | [optional] |
 
 ### Return type
 
@@ -108,8 +108,8 @@ let apiInstance = new NgsiV2.AttributesApi();
 let entityId = "entityId_example"; // String | Id of the entity.
 let attrName = "attrName_example"; // String | Attribute name.
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     type: "type_example" // String | Entity type, to avoid ambiguity in the case there are several entities with the same entity id.
 };
 apiInstance.removeASingleAttribute(
@@ -128,13 +128,13 @@ apiInstance.removeASingleAttribute(
 
 ### Parameters
 
-| Name                  | Type       | Description                                                                                     | Notes      |
-| --------------------- | ---------- | ----------------------------------------------------------------------------------------------- | ---------- |
-| **entityId**          | **String** | Id of the entity.                                                                               |
-| **attrName**          | **String** | Attribute name.                                                                                 |
-| **fiwareService**     | **String** |                                                                                                 | [optional] |
-| **fiwareServicePath** | **String** |                                                                                                 | [optional] |
-| **type**              | **String** | Entity type, to avoid ambiguity in the case there are several entities with the same entity id. | [optional] |
+| Name                  | Type       | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **entityId**          | **String** | Id of the entity.                                                                                                                                                                                                                          |
+| **attrName**          | **String** | Attribute name.                                                                                                                                                                                                                            |
+| **fiwareService**     | **String** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **type**              | **String** | Entity type, to avoid ambiguity in the case there are several entities with the same entity id.                                                                                                                                            | [optional] |
 
 ### Return type
 
@@ -181,8 +181,8 @@ let entityId = "entityId_example"; // String | Id of the entity to update
 let attrName = "attrName_example"; // String | Attribute name
 let attribute = new NgsiV2.Attribute(); // Attribute |
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     type: "type_example" // String | Entity type, to avoid ambiguity in case there are several entities with the same entity id.
 };
 apiInstance.updateAttributeData(
@@ -202,14 +202,14 @@ apiInstance.updateAttributeData(
 
 ### Parameters
 
-| Name                  | Type                          | Description                                                                                 | Notes      |
-| --------------------- | ----------------------------- | ------------------------------------------------------------------------------------------- | ---------- |
-| **entityId**          | **String**                    | Id of the entity to update                                                                  |
-| **attrName**          | **String**                    | Attribute name                                                                              |
-| **attribute**         | [**Attribute**](Attribute.md) |                                                                                             |
-| **fiwareService**     | **String**                    |                                                                                             | [optional] |
-| **fiwareServicePath** | **String**                    |                                                                                             | [optional] |
-| **type**              | **String**                    | Entity type, to avoid ambiguity in case there are several entities with the same entity id. | [optional] |
+| Name                  | Type                          | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **entityId**          | **String**                    | Id of the entity to update                                                                                                                                                                                                                 |
+| **attrName**          | **String**                    | Attribute name                                                                                                                                                                                                                             |
+| **attribute**         | [**Attribute**](Attribute.md) |                                                                                                                                                                                                                                            |
+| **fiwareService**     | **String**                    | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String**                    | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **type**              | **String**                    | Entity type, to avoid ambiguity in case there are several entities with the same entity id.                                                                                                                                                | [optional] |
 
 ### Return type
 

@@ -39,8 +39,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 let apiInstance = new NgsiV2.RegistrationsApi();
 let registrationBody = new NgsiV2.RegistrationBody(); // RegistrationBody |
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example" // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example" // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
 };
 apiInstance.createRegistrations(
     registrationBody,
@@ -57,11 +57,11 @@ apiInstance.createRegistrations(
 
 ### Parameters
 
-| Name                  | Type                                        | Description | Notes      |
-| --------------------- | ------------------------------------------- | ----------- | ---------- |
-| **registrationBody**  | [**RegistrationBody**](RegistrationBody.md) |             |
-| **fiwareService**     | **String**                                  |             | [optional] |
-| **fiwareServicePath** | **String**                                  |             | [optional] |
+| Name                  | Type                                        | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **registrationBody**  | [**RegistrationBody**](RegistrationBody.md) |                                                                                                                                                                                                                                            |
+| **fiwareService**     | **String**                                  | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String**                                  | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
 
 ### Return type
 
@@ -103,8 +103,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 let apiInstance = new NgsiV2.RegistrationsApi();
 let registrationId = "registrationId_example"; // String | registration Id.
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example" // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example" // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
 };
 apiInstance.deleteRegistration(
     registrationId,
@@ -121,11 +121,11 @@ apiInstance.deleteRegistration(
 
 ### Parameters
 
-| Name                  | Type       | Description      | Notes      |
-| --------------------- | ---------- | ---------------- | ---------- |
-| **registrationId**    | **String** | registration Id. |
-| **fiwareService**     | **String** |                  | [optional] |
-| **fiwareServicePath** | **String** |                  | [optional] |
+| Name                  | Type       | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **registrationId**    | **String** | registration Id.                                                                                                                                                                                                                           |
+| **fiwareService**     | **String** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
 
 ### Return type
 
@@ -167,8 +167,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 let apiInstance = new NgsiV2.RegistrationsApi();
 let registrationId = "registrationId_example"; // String | registration Id.
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example" // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example" // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
 };
 apiInstance.retrieveRegistration(
     registrationId,
@@ -185,11 +185,11 @@ apiInstance.retrieveRegistration(
 
 ### Parameters
 
-| Name                  | Type       | Description      | Notes      |
-| --------------------- | ---------- | ---------------- | ---------- |
-| **registrationId**    | **String** | registration Id. |
-| **fiwareService**     | **String** |                  | [optional] |
-| **fiwareServicePath** | **String** |                  | [optional] |
+| Name                  | Type       | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **registrationId**    | **String** | registration Id.                                                                                                                                                                                                                           |
+| **fiwareService**     | **String** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
 
 ### Return type
 
@@ -226,8 +226,8 @@ BearerAuth.accessToken = "YOUR ACCESS TOKEN";
 
 let apiInstance = new NgsiV2.RegistrationsApi();
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example", // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example", // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
     limit: 56, // Number | Limit the number of types to be retrieved
     offset: 56, // Number | Skip a number of records
     options: "options_example" // String | Options dictionary
@@ -243,13 +243,13 @@ apiInstance.retrieveRegistrations(opts, (error, data, response) => {
 
 ### Parameters
 
-| Name                  | Type       | Description                               | Notes      |
-| --------------------- | ---------- | ----------------------------------------- | ---------- |
-| **fiwareService**     | **String** |                                           | [optional] |
-| **fiwareServicePath** | **String** |                                           | [optional] |
-| **limit**             | **Number** | Limit the number of types to be retrieved | [optional] |
-| **offset**            | **Number** | Skip a number of records                  | [optional] |
-| **options**           | **String** | Options dictionary                        | [optional] |
+| Name                  | Type       | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **fiwareService**     | **String** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **limit**             | **Number** | Limit the number of types to be retrieved                                                                                                                                                                                                  | [optional] |
+| **offset**            | **Number** | Skip a number of records                                                                                                                                                                                                                   | [optional] |
+| **options**           | **String** | Options dictionary                                                                                                                                                                                                                         | [optional] |
 
 ### Return type
 
@@ -294,8 +294,8 @@ let apiInstance = new NgsiV2.RegistrationsApi();
 let registrationId = "registrationId_example"; // String | registration Id.
 let registrationBody = new NgsiV2.RegistrationBody(); // RegistrationBody |
 let opts = {
-    fiwareService: "fiwareService_example", // String |
-    fiwareServicePath: "fiwareServicePath_example" // String |
+    fiwareService: "fiwareService_example", // String | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..
+    fiwareServicePath: "fiwareServicePath_example" // String | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely.
 };
 apiInstance.updateRegistration(
     registrationId,
@@ -313,12 +313,12 @@ apiInstance.updateRegistration(
 
 ### Parameters
 
-| Name                  | Type                                        | Description      | Notes      |
-| --------------------- | ------------------------------------------- | ---------------- | ---------- |
-| **registrationId**    | **String**                                  | registration Id. |
-| **registrationBody**  | [**RegistrationBody**](RegistrationBody.md) |                  |
-| **fiwareService**     | **String**                                  |                  | [optional] |
-| **fiwareServicePath** | **String**                                  |                  | [optional] |
+| Name                  | Type                                        | Description                                                                                                                                                                                                                                | Notes      |
+| --------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **registrationId**    | **String**                                  | registration Id.                                                                                                                                                                                                                           |
+| **registrationBody**  | [**RegistrationBody**](RegistrationBody.md) |                                                                                                                                                                                                                                            |
+| **fiwareService**     | **String**                                  | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiwareServicePath** | **String**                                  | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
 
 ### Return type
 

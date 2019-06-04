@@ -45,8 +45,8 @@ configuration.access_token = 'YOUR_BEARER_TOKEN'
 # create an instance of the API class
 api_instance = ngsi_v2.TypesApi(ngsi_v2.ApiClient(configuration))
 entity_type = 'entity_type_example' # str | Entity Type
-fiware_service = 'fiware_service_example' # str |  (optional)
-fiware_service_path = 'fiware_service_path_example' # str |  (optional)
+fiware_service = 'fiware_service_example' # str | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used.. (optional)
+fiware_service_path = 'fiware_service_path_example' # str | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely. (optional)
 
 try:
     api_response = api_instance.retrieve_entity_type(entity_type, fiware_service=fiware_service, fiware_service_path=fiware_service_path)
@@ -75,8 +75,8 @@ configuration.access_token = 'YOUR_BEARER_TOKEN'
 # create an instance of the API class
 api_instance = ngsi_v2.TypesApi(ngsi_v2.ApiClient(configuration))
 entity_type = 'entity_type_example' # str | Entity Type
-fiware_service = 'fiware_service_example' # str |  (optional)
-fiware_service_path = 'fiware_service_path_example' # str |  (optional)
+fiware_service = 'fiware_service_example' # str | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used.. (optional)
+fiware_service_path = 'fiware_service_path_example' # str | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely. (optional)
 
 try:
     api_response = api_instance.retrieve_entity_type(entity_type, fiware_service=fiware_service, fiware_service_path=fiware_service_path)
@@ -87,11 +87,11 @@ except ApiException as e:
 
 ### Parameters
 
-| Name                    | Type    | Description | Notes      |
-| ----------------------- | ------- | ----------- | ---------- |
-| **entity_type**         | **str** | Entity Type |
-| **fiware_service**      | **str** |             | [optional] |
-| **fiware_service_path** | **str** |             | [optional] |
+| Name                    | Type    | Description                                                                                                                                                                                                                                | Notes      |
+| ----------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **entity_type**         | **str** | Entity Type                                                                                                                                                                                                                                |
+| **fiware_service**      | **str** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiware_service_path** | **str** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
 
 ### Return type
 
@@ -111,8 +111,8 @@ except ApiException as e:
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **200**     | EntityType    | -                |
-| **4xx**     | error payload | -                |
-| **5xx**     | error payload | -                |
+| **4XX**     | error payload | -                |
+| **5XX**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -160,8 +160,8 @@ configuration.access_token = 'YOUR_BEARER_TOKEN'
 
 # create an instance of the API class
 api_instance = ngsi_v2.TypesApi(ngsi_v2.ApiClient(configuration))
-fiware_service = 'fiware_service_example' # str |  (optional)
-fiware_service_path = 'fiware_service_path_example' # str |  (optional)
+fiware_service = 'fiware_service_example' # str | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used.. (optional)
+fiware_service_path = 'fiware_service_path_example' # str | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely. (optional)
 limit = 56 # int | Limit the number of types to be retrieved. (optional)
 offset = 56 # int | Skip a number of records. (optional)
 options = 'options_example' # str | Options dictionary. (optional)
@@ -192,8 +192,8 @@ configuration.access_token = 'YOUR_BEARER_TOKEN'
 
 # create an instance of the API class
 api_instance = ngsi_v2.TypesApi(ngsi_v2.ApiClient(configuration))
-fiware_service = 'fiware_service_example' # str |  (optional)
-fiware_service_path = 'fiware_service_path_example' # str |  (optional)
+fiware_service = 'fiware_service_example' # str | When \"-multiservice\" is used, Orion uses the \"Fiware-Service\" HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used.. (optional)
+fiware_service_path = 'fiware_service_path_example' # str | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don't include service path information in the database) belongs to a root scope \"/\" implicitely. (optional)
 limit = 56 # int | Limit the number of types to be retrieved. (optional)
 offset = 56 # int | Skip a number of records. (optional)
 options = 'options_example' # str | Options dictionary. (optional)
@@ -207,13 +207,13 @@ except ApiException as e:
 
 ### Parameters
 
-| Name                    | Type    | Description                                | Notes      |
-| ----------------------- | ------- | ------------------------------------------ | ---------- |
-| **fiware_service**      | **str** |                                            | [optional] |
-| **fiware_service_path** | **str** |                                            | [optional] |
-| **limit**               | **int** | Limit the number of types to be retrieved. | [optional] |
-| **offset**              | **int** | Skip a number of records.                  | [optional] |
-| **options**             | **str** | Options dictionary.                        | [optional] |
+| Name                    | Type    | Description                                                                                                                                                                                                                                | Notes      |
+| ----------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| **fiware_service**      | **str** | When \&quot;-multiservice\&quot; is used, Orion uses the \&quot;Fiware-Service\&quot; HTTP header in the request to identify the service/tenant. If the header is not present in the HTTP request, the default service/tenant is used..    | [optional] |
+| **fiware_service_path** | **str** | Fiware-ServicePath is an optional header. It is assumed that all the entities created without Fiware-ServicePath (or that don&#39;t include service path information in the database) belongs to a root scope \&quot;/\&quot; implicitely. | [optional] |
+| **limit**               | **int** | Limit the number of types to be retrieved.                                                                                                                                                                                                 | [optional] |
+| **offset**              | **int** | Skip a number of records.                                                                                                                                                                                                                  | [optional] |
+| **options**             | **str** | Options dictionary.                                                                                                                                                                                                                        | [optional] |
 
 ### Return type
 
@@ -233,8 +233,8 @@ except ApiException as e:
 | Status code | Description        | Response headers |
 | ----------- | ------------------ | ---------------- |
 | **200**     | List of EntityType | -                |
-| **4xx**     | error payload      | -                |
-| **5xx**     | error payload      | -                |
+| **4XX**     | error payload      | -                |
+| **5XX**     | error payload      | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
