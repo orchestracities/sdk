@@ -1,0 +1,14 @@
+# QueryPattern
+
+## Properties
+
+| Name             | Type    | Description | Notes      |
+| ---------------- | ------- | ----------- | ---------- |
+| **id**           | **str** |             | [optional] |
+| **id_pattern**   | **str** |             | [optional] |
+| **type**         | **str** |             | [optional] |
+| **type_pattern** | **str** |             | [optional] |
+
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to README]](../README.md)

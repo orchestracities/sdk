@@ -22,4 +22,6 @@ do
   v=$(yaml $f info.version)
   echo "Building $t API version $v for JavaScript"
   npm install -C ./javascript/$t
+  npm link -C ./javascript/$t
+  npm run build -C ./javascript/$t
 done

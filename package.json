@@ -56,7 +56,6 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix",
       "prettier --parser flow --single-quote --trailing-comma es5 --write",
       "git add"
     ],
@@ -64,5 +63,10 @@
       "prettier --tab-width 4 --print-width 80 --write --prose-wrap always",
       "git add"
     ]
+  },
+  "dependencies": {
+    "prompt": "^1.0.0",
+    "request": "^2.88.0",
+    "ngsi_v2": "file:./javascript/ngsi_v2"
   }
 }

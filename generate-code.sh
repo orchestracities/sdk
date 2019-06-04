@@ -26,11 +26,12 @@ do
   do
     l="${LANGUAGES[$i]}"
     echo "Generating code for $t API version $v language $l"
-    docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+    docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli:v4.0.1 generate \
         -i /local/$f \
         -g $l \
         -o /local/$l/$t \
         --package-name $t \
-        --artifact-version $v
+        --artifact-version $v \
+        --generate-alias-as-model
   done
 done
