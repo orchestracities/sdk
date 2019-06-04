@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   version: 0.2.2
-  title: ngsi-v2
+  title: ngsi_v2
   description: NGSI V2 API RC-2018.07
   license:
     name: Apache 2.0
@@ -22,7 +22,7 @@ paths:
         - API Entry Point
       operationId: Retrieve API Resources
       responses:
-        "200":
+        200:
           description: ""
           headers:
             Content-Type:
@@ -158,15 +158,13 @@ paths:
           required: false
           description: Limits the number of entities to be retrieved
           schema:
-            type: number
-            format: double
+            type: integer
         - name: offset
           in: query
           required: false
           description: Establishes the offset from where entities are retrieved
           schema:
-            type: number
-            format: double
+            type: integer
         - name: attrs
           in: query
           required: false
@@ -201,19 +199,14 @@ paths:
               - values
               - unique
       responses:
-        "200":
-          headers:
-            Content-Type:
-              description: application/json
-              schema:
-                type: string
-          description: JSON Entity Representation
+        200:
+          description: List of entities
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/EntityId"
+                  $ref: "#/components/schemas/Entity"
         default:
           description: error payload
           content:
@@ -261,18 +254,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EntityId"
-        description: JSON Entity Representation
+              $ref: "#/components/schemas/Entity"
         required: true
       responses:
-        "201":
+        201:
           description: When upsert option is not used
           headers:
             Location:
               description: URL of the created entity.
               schema:
                 type: string
-        "204":
+        204:
           description: If upsert option is used
           headers:
             Location:
@@ -360,17 +352,17 @@ paths:
               - values
               - unique
       responses:
-        "200":
+        200:
+          description: Single Entity
           headers:
             Content-Type:
               description: application/json
               schema:
                 type: string
-          description: JSON Entity Representation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EntityId"
+                $ref: "#/components/schemas/Entity"
         default:
           description: error payload
           content:
@@ -417,7 +409,7 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        200:
           description: ""
         default:
           description: error payload
@@ -498,17 +490,17 @@ paths:
               - values
               - unique
       responses:
-        "200":
+        200:
+          description: Attributes of an Entity
           headers:
             Content-Type:
               description: application/json
               schema:
                 type: string
-          description: JSON Attribute Representation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Entity"
+                type: object
         default:
           description: error payload
           content:
@@ -571,7 +563,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -643,7 +635,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -707,7 +699,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -773,13 +765,13 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        200:
+          description: Attribute of an Entity
           headers:
             Content-Type:
               description: application/json
               schema:
                 type: string
-          description: JSON Entity Representation
           content:
             application/json:
               schema:
@@ -842,7 +834,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttribute"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -896,7 +888,7 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -965,8 +957,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: JSON AttributeValue Representation
+        200:
+          description: Attribute Value of an Entity
           content:
             application/json:
               schema:
@@ -978,9 +970,6 @@ paths:
           description: error payload
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-            plain/text:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
     put:
@@ -1055,10 +1044,9 @@ paths:
           plain/text:
             schema:
               $ref: "#/components/schemas/AttributeValuePlain"
-        description: JSON AttributeValue Representation
         required: true
       responses:
-        "200":
+        200:
           description: ""
         default:
           description: error payload
@@ -1114,15 +1102,13 @@ paths:
           required: false
           description: Limit the number of types to be retrieved.
           schema:
-            type: number
-            format: double
+            type: integer
         - name: offset
           in: query
           required: false
           description: Skip a number of records.
           schema:
-            type: number
-            format: double
+            type: integer
         - name: options
           in: query
           required: false
@@ -1133,14 +1119,14 @@ paths:
               - count
               - values
       responses:
-        "200":
-          description: ""
+        200:
+          description: List of EntityType
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/EntityTypeId"
+                  $ref: "#/components/schemas/EntityType"
         default:
           description: error payload
           content:
@@ -1188,12 +1174,12 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: EntityType Representation
+        200:
+          description: EntityType
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/EntityType"
+                $ref: "#/components/schemas/EntityTypeBody"
         default:
           description: error payload
           content:
@@ -1231,15 +1217,13 @@ paths:
           required: false
           description: Limit the number of types to be retrieved
           schema:
-            type: number
-            format: double
+            type: integer
         - name: offset
           in: query
           required: false
           description: Skip a number of records
           schema:
-            type: number
-            format: double
+            type: integer
         - name: options
           in: query
           required: false
@@ -1249,14 +1233,14 @@ paths:
             enum:
               - count
       responses:
-        "200":
+        200:
           description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/SubscriptionId"
+                  $ref: "#/components/schemas/Subscription"
         default:
           description: error payload
           content:
@@ -1292,9 +1276,9 @@ paths:
             type: string
           required: false
       requestBody:
-        $ref: "#/components/requestBodies/Subscription"
+        $ref: "#/components/requestBodies/updateSubscription"
       responses:
-        "201":
+        201:
           description: ""
           headers:
             Location:
@@ -1343,12 +1327,12 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        200:
           description: ""
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SubscriptionId"
+                $ref: "#/components/schemas/Subscription"
         default:
           description: error payload
           content:
@@ -1387,7 +1371,7 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -1427,9 +1411,9 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: "#/components/requestBodies/Subscription"
+        $ref: "#/components/requestBodies/updateSubscription"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -1460,15 +1444,13 @@ paths:
           required: false
           description: Limit the number of types to be retrieved
           schema:
-            type: number
-            format: double
+            type: integer
         - name: offset
           in: query
           required: false
           description: Skip a number of records
           schema:
-            type: number
-            format: double
+            type: integer
         - name: options
           in: query
           required: false
@@ -1478,14 +1460,14 @@ paths:
             enum:
               - count
       responses:
-        "200":
+        200:
           description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/RegistrationId"
+                  $ref: "#/components/schemas/Registration"
         default:
           description: error payload
           content:
@@ -1521,9 +1503,9 @@ paths:
             type: string
           required: false
       requestBody:
-        $ref: "#/components/requestBodies/Registration"
+        $ref: "#/components/requestBodies/updateRegistration"
       responses:
-        "201":
+        201:
           description: ""
           headers:
             Location:
@@ -1570,12 +1552,12 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        200:
           description: ""
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/RegistrationId"
+                $ref: "#/components/schemas/Registration"
         default:
           description: error payload
           content:
@@ -1617,9 +1599,9 @@ paths:
           schema:
             type: string
       requestBody:
-        $ref: "#/components/requestBodies/Registration"
+        $ref: "#/components/requestBodies/updateRegistration"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -1659,7 +1641,7 @@ paths:
           schema:
             type: string
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -1712,29 +1694,9 @@ paths:
             enum:
               - keyValues
       requestBody:
-        content:
-          application/json:
-            schema:
-              title: BatchOperation
-              required:
-                - actionType
-                - entities
-              properties:
-                actionType:
-                  type: string
-                  enum:
-                    - append
-                    - appendStrict
-                    - update
-                    - delete
-                    - replace
-                entities:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/EntityId"
-        required: true
+        $ref: "#/components/requestBodies/batchUpdate"
       responses:
-        "204":
+        204:
           description: ""
         default:
           description: error payload
@@ -1790,15 +1752,13 @@ paths:
           required: false
           description: Limit the number of entities to be retrieved.
           schema:
-            type: number
-            format: double
+            type: integer
         - name: offset
           in: query
           required: false
           description: Skip a number of records.
           schema:
-            type: number
-            format: double
+            type: integer
         - name: orderBy
           in: query
           required: false
@@ -1819,55 +1779,16 @@ paths:
               - values
               - unique
       requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                entities:
-                  type: array
-                  items:
-                    title: QueryPattern
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      idPattern:
-                        type: string
-                      type:
-                        type: string
-                      typePattern:
-                        type: string
-                attrs:
-                  type: array
-                  items:
-                    type: string
-                expression:
-                  type: object
-                  properties:
-                    q:
-                      type: string
-                    mq:
-                      type: string
-                    georel:
-                      type: string
-                    geometry:
-                      type: string
-                    coords:
-                      type: string
-                metadata:
-                  type: array
-                  items:
-                    type: string
-        required: true
+        $ref: "#/components/requestBodies/batchQuery"
       responses:
-        "200":
+        200:
           description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                   $ref: "#/components/schemas/EntityId"
+                   $ref: "#/components/schemas/Entity"
         default:
           description: error payload
           content:
@@ -1915,9 +1836,9 @@ paths:
             enum:
               - keyValues
       requestBody:
-        $ref: "#/components/requestBodies/Subscription"
+        $ref: "#/components/requestBodies/batchNotify"
       responses:
-        "200":
+        200:
           description: ""
         default:
           description: error payload
@@ -1939,20 +1860,38 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Entity"
+            type: object
       required: true
-    Subscription:
+    updateSubscription:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Subscription"
+            $ref: "#/components/schemas/SubscriptionBody"
       required: true
-    Registration:
+    updateRegistration:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Registration"
+            $ref: "#/components/schemas/RegistrationBody"
       required: true
+    batchUpdate:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchUpdate"
+        required: true
+    batchQuery:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchQuery"
+        required: true
+    batchNotify:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchNotify"
+        required: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -2009,8 +1948,76 @@ components:
         error: operation not supported
         description: >- 
           this implementation of NGSI v2 does not support the called operation
+    BatchUpdate:
+      type: object
+      required:
+        - actionType
+        - entities
+      properties:
+        actionType:
+          type: string
+          enum:
+            - append
+            - appendStrict
+            - update
+            - delete
+            - replace
+        entities:
+          type: array
+          items:
+            $ref: "#/components/schemas/Entity"
+    BatchQuery:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            title: QueryPattern
+            type: object
+            properties:
+              id:
+                type: string
+              idPattern:
+                type: string
+              type:
+                type: string
+              typePattern:
+                type: string
+        attrs:
+          type: array
+          items:
+            type: string
+        expression:
+          type: object
+          properties:
+            q:
+              type: string
+            mq:
+              type: string
+            georel:
+              type: string
+            geometry:
+              type: string
+            coords:
+              type: string
+        metadata:
+          type: array
+          items:
+            type: string
+    BatchNotify:
+      required:
+        - subscriptionId
+        - data
+      properties:
+        subscriptionId:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Entity"
     AttributeValueObject:
       type: object
+      additionalProperties: {}
       example:
         address: Ronda de la Comunicacion s/n
         zipCode: 28050
@@ -2044,7 +2051,7 @@ components:
           accuracy:
             value: 2
             type: Number
-    EntityType:
+    EntityTypeBody:
       type: object
       required:
         - attrs
@@ -2066,15 +2073,19 @@ components:
             types:
               - urn:phenomenum:temperature
         count: 7
-    EntityTypeId:
-      allOf:
-        - $ref: '#/components/schemas/EntityType'
-        - type: object
-          required:
-          - type
-          properties:
-            type:
-              type: string
+    EntityType:
+      type: object
+      required:
+        - type
+        - attrs
+        - count
+      properties:
+        attrs:
+          type: object
+        count:
+          type: integer
+        type:
+          type: string
       example:
         type: "Car"
         attrs:
@@ -2088,16 +2099,17 @@ components:
             types:
               - urn:phenomenum:temperature
         count: 7
-    EntityId:
+    Entity:
       type: object
       required:
-        - type
-        - id
+      - type
+      - id
       properties:
         type:
           type: string
         id:
           type: string
+      additionalProperties: {}
       example:
         type: Room
         id: DC_S1-D41
@@ -2108,20 +2120,7 @@ components:
             accuracy:
               value: 2
               type: Number
-    Entity:
-      type: object
-      example:
-        temperature:
-          value: 35.6
-          type: Number
-          metadata:
-            accuracy:
-              value: 2
-              type: Number
-        pressure:
-          value: 100
-          type: Number
-    Subscription:
+    SubscriptionBody:
       type: object
       required:
         - subject
@@ -2213,16 +2212,102 @@ components:
         throttling:
           type: integer
           format: int32
-    SubscriptionId:
-      allOf:
-        - $ref: '#/components/schemas/Subscription'
-        - type: object
-          required:
-           - id
+    Subscription:
+      type: object
+      required:
+        - id
+        - subject
+        - notification
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        subject:
+          type: object
           properties:
-            id:
+            entities:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  idPattern:
+                    type: string
+                  type:
+                    type: string
+                  typePattern:
+                    type: string
+            conditions:
+              type: object
+              properties:
+                attrs:
+                  type: array
+                  items:
+                    type: string
+                expression:
+                  type: object
+                  properties:
+                    q:
+                      type: string
+                    mq:
+                      type: string
+                    georel:
+                      type: string
+                    geometry:
+                      type: string
+                    coords:
+                      type: string
+        notification:
+          type: object
+          properties:
+            attrs:
               type: string
-    Registration:
+            exceptAttrs:
+              type: string
+            http:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+            httpCustom:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                method:
+                  type: string
+                  enum:
+                    - GET
+                    - PUT
+                    - POST
+                    - DELETE
+                    - PATCH
+                    - HEAD
+                    - OPTIONS
+                    - TRACE
+                    - CONNECT
+                qs:
+                  type: object
+                headers:
+                  type: object
+                payload:
+                  type: string
+        expires:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+        throttling:
+          type: integer
+          format: int32
+    RegistrationBody:
       type: object
       required:
        - provider
@@ -2242,15 +2327,29 @@ components:
           enum:
             - active
             - inactive
-    RegistrationId:
-      allOf:
-        - $ref: '#/components/schemas/Registration'
-        - type: object
-          required:
-           - id
-          properties:
-            id:
-              type: string
+    Registration:
+      type: object
+      required:
+       - id
+       - provider
+       - dataProvided
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        provider:
+          $ref: "#/components/schemas/Provider"
+        dataProvided:
+          $ref: "#/components/schemas/DataProvided"
+        expires:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
     Provider:
       type: object
       properties:
