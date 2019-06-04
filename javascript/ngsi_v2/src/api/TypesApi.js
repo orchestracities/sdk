@@ -52,7 +52,7 @@ export default class TypesApi {
    */
   retrieveEntityType(entityType, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityType' is set
     if (entityType === undefined || entityType === null) {
       throw new Error(
@@ -60,20 +60,20 @@ export default class TypesApi {
       );
     }
 
-    const pathParams = {
-      entityType,
+    let pathParams = {
+      entityType: entityType,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = EntityTypeBody;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = EntityTypeBody;
     return this.apiClient.callApi(
       '/types/{entityType}',
       'GET',
@@ -112,24 +112,24 @@ export default class TypesApi {
    */
   retrieveEntityTypes(opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
 
-    const pathParams = {};
-    const queryParams = {
-      limit: opts.limit,
-      offset: opts.offset,
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      limit: opts['limit'],
+      offset: opts['offset'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = [EntityType];
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = [EntityType];
     return this.apiClient.callApi(
       '/types/',
       'GET',

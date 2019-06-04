@@ -46,16 +46,19 @@ class QueryPattern {
       obj = obj || new QueryPattern();
 
       if (data.hasOwnProperty('id')) {
-        obj.id = ApiClient.convertToType(data.id, 'String');
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
       }
       if (data.hasOwnProperty('idPattern')) {
-        obj.idPattern = ApiClient.convertToType(data.idPattern, 'String');
+        obj['idPattern'] = ApiClient.convertToType(data['idPattern'], 'String');
       }
       if (data.hasOwnProperty('type')) {
-        obj.type = ApiClient.convertToType(data.type, 'String');
+        obj['type'] = ApiClient.convertToType(data['type'], 'String');
       }
       if (data.hasOwnProperty('typePattern')) {
-        obj.typePattern = ApiClient.convertToType(data.typePattern, 'String');
+        obj['typePattern'] = ApiClient.convertToType(
+          data['typePattern'],
+          'String'
+        );
       }
     }
     return obj;
@@ -65,21 +68,21 @@ class QueryPattern {
 /**
  * @member {String} id
  */
-QueryPattern.prototype.id = undefined;
+QueryPattern.prototype['id'] = undefined;
 
 /**
  * @member {String} idPattern
  */
-QueryPattern.prototype.idPattern = undefined;
+QueryPattern.prototype['idPattern'] = undefined;
 
 /**
  * @member {String} type
  */
-QueryPattern.prototype.type = undefined;
+QueryPattern.prototype['type'] = undefined;
 
 /**
  * @member {String} typePattern
  */
-QueryPattern.prototype.typePattern = undefined;
+QueryPattern.prototype['typePattern'] = undefined;
 
 export default QueryPattern;

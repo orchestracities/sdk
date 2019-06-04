@@ -53,7 +53,7 @@ export default class AttributeValueApi {
    */
   getAttributeValue(entityId, attrName, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -67,23 +67,23 @@ export default class AttributeValueApi {
       );
     }
 
-    const pathParams = {
-      entityId,
-      attrName,
+    let pathParams = {
+      entityId: entityId,
+      attrName: attrName,
     };
-    const queryParams = {
-      type: opts.type,
+    let queryParams = {
+      type: opts['type'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json', 'plain/text'];
-    const returnType = AttributeValueObject;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json', 'plain/text'];
+    let returnType = AttributeValueObject;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs/{attrName}/value',
       'GET',
@@ -122,7 +122,7 @@ export default class AttributeValueApi {
    */
   updateAttributeValue(entityId, attrName, requestBody, opts, callback) {
     opts = opts || {};
-    const postBody = requestBody;
+    let postBody = requestBody;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -142,23 +142,23 @@ export default class AttributeValueApi {
       );
     }
 
-    const pathParams = {
-      entityId,
-      attrName,
+    let pathParams = {
+      entityId: entityId,
+      attrName: attrName,
     };
-    const queryParams = {
-      type: opts.type,
+    let queryParams = {
+      type: opts['type'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json', 'plain/text'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json', 'plain/text'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs/{attrName}/value',
       'PUT',

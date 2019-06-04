@@ -51,7 +51,7 @@ export default class RegistrationsApi {
    */
   createRegistrations(registrationBody, opts, callback) {
     opts = opts || {};
-    const postBody = registrationBody;
+    let postBody = registrationBody;
     // verify the required parameter 'registrationBody' is set
     if (registrationBody === undefined || registrationBody === null) {
       throw new Error(
@@ -59,18 +59,18 @@ export default class RegistrationsApi {
       );
     }
 
-    const pathParams = {};
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let pathParams = {};
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/registrations',
       'POST',
@@ -106,7 +106,7 @@ export default class RegistrationsApi {
    */
   deleteRegistration(registrationId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'registrationId' is set
     if (registrationId === undefined || registrationId === null) {
       throw new Error(
@@ -114,20 +114,20 @@ export default class RegistrationsApi {
       );
     }
 
-    const pathParams = {
-      registrationId,
+    let pathParams = {
+      registrationId: registrationId,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/registrations/{registrationId}',
       'DELETE',
@@ -164,7 +164,7 @@ export default class RegistrationsApi {
    */
   retrieveRegistration(registrationId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'registrationId' is set
     if (registrationId === undefined || registrationId === null) {
       throw new Error(
@@ -172,20 +172,20 @@ export default class RegistrationsApi {
       );
     }
 
-    const pathParams = {
-      registrationId,
+    let pathParams = {
+      registrationId: registrationId,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = Registration;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = Registration;
     return this.apiClient.callApi(
       '/registrations/{registrationId}',
       'GET',
@@ -224,24 +224,24 @@ export default class RegistrationsApi {
    */
   retrieveRegistrations(opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
 
-    const pathParams = {};
-    const queryParams = {
-      limit: opts.limit,
-      offset: opts.offset,
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      limit: opts['limit'],
+      offset: opts['offset'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = [Registration];
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = [Registration];
     return this.apiClient.callApi(
       '/registrations',
       'GET',
@@ -278,7 +278,7 @@ export default class RegistrationsApi {
    */
   updateRegistration(registrationId, registrationBody, opts, callback) {
     opts = opts || {};
-    const postBody = registrationBody;
+    let postBody = registrationBody;
     // verify the required parameter 'registrationId' is set
     if (registrationId === undefined || registrationId === null) {
       throw new Error(
@@ -292,20 +292,20 @@ export default class RegistrationsApi {
       );
     }
 
-    const pathParams = {
-      registrationId,
+    let pathParams = {
+      registrationId: registrationId,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/registrations/{registrationId}',
       'PATCH',

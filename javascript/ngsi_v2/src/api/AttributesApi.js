@@ -54,7 +54,7 @@ export default class AttributesApi {
    */
   getAttributeData(entityId, attrName, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -68,24 +68,24 @@ export default class AttributesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
-      attrName,
+    let pathParams = {
+      entityId: entityId,
+      attrName: attrName,
     };
-    const queryParams = {
-      type: opts.type,
-      metadata: opts.metadata,
+    let queryParams = {
+      type: opts['type'],
+      metadata: opts['metadata'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = Attribute;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = Attribute;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs/{attrName}',
       'GET',
@@ -123,7 +123,7 @@ export default class AttributesApi {
    */
   removeASingleAttribute(entityId, attrName, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -137,23 +137,23 @@ export default class AttributesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
-      attrName,
+    let pathParams = {
+      entityId: entityId,
+      attrName: attrName,
     };
-    const queryParams = {
-      type: opts.type,
+    let queryParams = {
+      type: opts['type'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs/{attrName}',
       'DELETE',
@@ -192,7 +192,7 @@ export default class AttributesApi {
    */
   updateAttributeData(entityId, attrName, attribute, opts, callback) {
     opts = opts || {};
-    const postBody = attribute;
+    let postBody = attribute;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -212,23 +212,23 @@ export default class AttributesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
-      attrName,
+    let pathParams = {
+      entityId: entityId,
+      attrName: attrName,
     };
-    const queryParams = {
-      type: opts.type,
+    let queryParams = {
+      type: opts['type'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs/{attrName}',
       'PUT',

@@ -49,10 +49,10 @@ class APIEntryPoint {
     subscriptionsUrl,
     registrationsUrl
   ) {
-    obj.entities_url = entitiesUrl;
-    obj.types_url = typesUrl;
-    obj.subscriptions_url = subscriptionsUrl;
-    obj.registrations_url = registrationsUrl;
+    obj['entities_url'] = entitiesUrl;
+    obj['types_url'] = typesUrl;
+    obj['subscriptions_url'] = subscriptionsUrl;
+    obj['registrations_url'] = registrationsUrl;
   }
 
   /**
@@ -67,20 +67,23 @@ class APIEntryPoint {
       obj = obj || new APIEntryPoint();
 
       if (data.hasOwnProperty('entities_url')) {
-        obj.entities_url = ApiClient.convertToType(data.entities_url, 'String');
+        obj['entities_url'] = ApiClient.convertToType(
+          data['entities_url'],
+          'String'
+        );
       }
       if (data.hasOwnProperty('types_url')) {
-        obj.types_url = ApiClient.convertToType(data.types_url, 'String');
+        obj['types_url'] = ApiClient.convertToType(data['types_url'], 'String');
       }
       if (data.hasOwnProperty('subscriptions_url')) {
-        obj.subscriptions_url = ApiClient.convertToType(
-          data.subscriptions_url,
+        obj['subscriptions_url'] = ApiClient.convertToType(
+          data['subscriptions_url'],
           'String'
         );
       }
       if (data.hasOwnProperty('registrations_url')) {
-        obj.registrations_url = ApiClient.convertToType(
-          data.registrations_url,
+        obj['registrations_url'] = ApiClient.convertToType(
+          data['registrations_url'],
           'String'
         );
       }
@@ -93,24 +96,24 @@ class APIEntryPoint {
  * URL which points to the entities resource
  * @member {String} entities_url
  */
-APIEntryPoint.prototype.entities_url = undefined;
+APIEntryPoint.prototype['entities_url'] = undefined;
 
 /**
  * URL which points to the types resource
  * @member {String} types_url
  */
-APIEntryPoint.prototype.types_url = undefined;
+APIEntryPoint.prototype['types_url'] = undefined;
 
 /**
  * URL which points to the subscriptions resource
  * @member {String} subscriptions_url
  */
-APIEntryPoint.prototype.subscriptions_url = undefined;
+APIEntryPoint.prototype['subscriptions_url'] = undefined;
 
 /**
  * URL which points to the registrations resource
  * @member {String} registrations_url
  */
-APIEntryPoint.prototype.registrations_url = undefined;
+APIEntryPoint.prototype['registrations_url'] = undefined;
 
 export default APIEntryPoint;

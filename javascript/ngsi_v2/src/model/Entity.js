@@ -36,8 +36,8 @@ class Entity {
    * Only for internal use.
    */
   static initialize(obj, type, id) {
-    obj.type = type;
-    obj.id = id;
+    obj['type'] = type;
+    obj['id'] = id;
   }
 
   /**
@@ -54,10 +54,10 @@ class Entity {
       ApiClient.constructFromObject(data, obj, 'Object');
 
       if (data.hasOwnProperty('type')) {
-        obj.type = ApiClient.convertToType(data.type, 'String');
+        obj['type'] = ApiClient.convertToType(data['type'], 'String');
       }
       if (data.hasOwnProperty('id')) {
-        obj.id = ApiClient.convertToType(data.id, 'String');
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
       }
     }
     return obj;
@@ -67,11 +67,11 @@ class Entity {
 /**
  * @member {String} type
  */
-Entity.prototype.type = undefined;
+Entity.prototype['type'] = undefined;
 
 /**
  * @member {String} id
  */
-Entity.prototype.id = undefined;
+Entity.prototype['id'] = undefined;
 
 export default Entity;

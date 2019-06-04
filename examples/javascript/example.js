@@ -124,18 +124,6 @@ function testAPI(token, apiKey) {
     }
   });
 
-  apiInstance = new NgsiV2.EntitiesApi();
-  entityId = 'urn:ngsi-ld:WeatherObserved:zurich'; // String | Id of the entity to be retrieved
-  apiInstance.retrieveEntity(entityId, opts, (error, data, response) => {
-    if (error) {
-      console.error(error);
-    } else {
-      console.log(
-        'API called successfully. Returned data: ' + JSON.stringify(data)
-      );
-    }
-  });
-
   apiInstance.retrieveEntityAttributes(
     entityId,
     opts,

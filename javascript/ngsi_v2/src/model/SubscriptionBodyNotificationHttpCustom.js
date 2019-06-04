@@ -46,19 +46,19 @@ class SubscriptionBodyNotificationHttpCustom {
       obj = obj || new SubscriptionBodyNotificationHttpCustom();
 
       if (data.hasOwnProperty('url')) {
-        obj.url = ApiClient.convertToType(data.url, 'String');
+        obj['url'] = ApiClient.convertToType(data['url'], 'String');
       }
       if (data.hasOwnProperty('method')) {
-        obj.method = ApiClient.convertToType(data.method, 'String');
+        obj['method'] = ApiClient.convertToType(data['method'], 'String');
       }
       if (data.hasOwnProperty('qs')) {
-        obj.qs = ApiClient.convertToType(data.qs, Object);
+        obj['qs'] = ApiClient.convertToType(data['qs'], Object);
       }
       if (data.hasOwnProperty('headers')) {
-        obj.headers = ApiClient.convertToType(data.headers, Object);
+        obj['headers'] = ApiClient.convertToType(data['headers'], Object);
       }
       if (data.hasOwnProperty('payload')) {
-        obj.payload = ApiClient.convertToType(data.payload, 'String');
+        obj['payload'] = ApiClient.convertToType(data['payload'], 'String');
       }
     }
     return obj;
@@ -68,34 +68,34 @@ class SubscriptionBodyNotificationHttpCustom {
 /**
  * @member {String} url
  */
-SubscriptionBodyNotificationHttpCustom.prototype.url = undefined;
+SubscriptionBodyNotificationHttpCustom.prototype['url'] = undefined;
 
 /**
  * @member {module:model/SubscriptionBodyNotificationHttpCustom.MethodEnum} method
  */
-SubscriptionBodyNotificationHttpCustom.prototype.method = undefined;
+SubscriptionBodyNotificationHttpCustom.prototype['method'] = undefined;
 
 /**
  * @member {Object} qs
  */
-SubscriptionBodyNotificationHttpCustom.prototype.qs = undefined;
+SubscriptionBodyNotificationHttpCustom.prototype['qs'] = undefined;
 
 /**
  * @member {Object} headers
  */
-SubscriptionBodyNotificationHttpCustom.prototype.headers = undefined;
+SubscriptionBodyNotificationHttpCustom.prototype['headers'] = undefined;
 
 /**
  * @member {String} payload
  */
-SubscriptionBodyNotificationHttpCustom.prototype.payload = undefined;
+SubscriptionBodyNotificationHttpCustom.prototype['payload'] = undefined;
 
 /**
  * Allowed values for the <code>method</code> property.
  * @enum {String}
  * @readonly
  */
-SubscriptionBodyNotificationHttpCustom.MethodEnum = {
+SubscriptionBodyNotificationHttpCustom['MethodEnum'] = {
   /**
    * value: "GET"
    * @const

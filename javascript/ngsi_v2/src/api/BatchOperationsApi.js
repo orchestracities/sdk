@@ -54,7 +54,7 @@ export default class BatchOperationsApi {
    */
   notify(batchNotify, opts, callback) {
     opts = opts || {};
-    const postBody = batchNotify;
+    let postBody = batchNotify;
     // verify the required parameter 'batchNotify' is set
     if (batchNotify === undefined || batchNotify === null) {
       throw new Error(
@@ -62,20 +62,20 @@ export default class BatchOperationsApi {
       );
     }
 
-    const pathParams = {};
-    const queryParams = {
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/op/notify',
       'POST',
@@ -116,7 +116,7 @@ export default class BatchOperationsApi {
    */
   query(batchQuery, opts, callback) {
     opts = opts || {};
-    const postBody = batchQuery;
+    let postBody = batchQuery;
     // verify the required parameter 'batchQuery' is set
     if (batchQuery === undefined || batchQuery === null) {
       throw new Error(
@@ -124,23 +124,23 @@ export default class BatchOperationsApi {
       );
     }
 
-    const pathParams = {};
-    const queryParams = {
-      limit: opts.limit,
-      offset: opts.offset,
-      orderBy: opts.orderBy,
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      limit: opts['limit'],
+      offset: opts['offset'],
+      orderBy: opts['orderBy'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = [Entity];
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = [Entity];
     return this.apiClient.callApi(
       '/op/query',
       'POST',
@@ -177,7 +177,7 @@ export default class BatchOperationsApi {
    */
   update(batchUpdate, opts, callback) {
     opts = opts || {};
-    const postBody = batchUpdate;
+    let postBody = batchUpdate;
     // verify the required parameter 'batchUpdate' is set
     if (batchUpdate === undefined || batchUpdate === null) {
       throw new Error(
@@ -185,20 +185,20 @@ export default class BatchOperationsApi {
       );
     }
 
-    const pathParams = {};
-    const queryParams = {
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/op/update',
       'POST',

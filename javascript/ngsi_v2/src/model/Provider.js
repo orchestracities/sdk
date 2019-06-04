@@ -47,13 +47,13 @@ class Provider {
       obj = obj || new Provider();
 
       if (data.hasOwnProperty('http')) {
-        obj.http = SubscriptionBodyNotificationHttp.constructFromObject(
-          data.http
+        obj['http'] = SubscriptionBodyNotificationHttp.constructFromObject(
+          data['http']
         );
       }
       if (data.hasOwnProperty('supportedForwardingMode')) {
-        obj.supportedForwardingMode = ApiClient.convertToType(
-          data.supportedForwardingMode,
+        obj['supportedForwardingMode'] = ApiClient.convertToType(
+          data['supportedForwardingMode'],
           'String'
         );
       }
@@ -65,19 +65,19 @@ class Provider {
 /**
  * @member {module:model/SubscriptionBodyNotificationHttp} http
  */
-Provider.prototype.http = undefined;
+Provider.prototype['http'] = undefined;
 
 /**
  * @member {module:model/Provider.SupportedForwardingModeEnum} supportedForwardingMode
  */
-Provider.prototype.supportedForwardingMode = undefined;
+Provider.prototype['supportedForwardingMode'] = undefined;
 
 /**
  * Allowed values for the <code>supportedForwardingMode</code> property.
  * @enum {String}
  * @readonly
  */
-Provider.SupportedForwardingModeEnum = {
+Provider['SupportedForwardingModeEnum'] = {
   /**
    * value: "none"
    * @const

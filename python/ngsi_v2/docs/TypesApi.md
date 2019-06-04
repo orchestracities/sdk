@@ -111,7 +111,8 @@ except ApiException as e:
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **200**     | EntityType    | -                |
-| **0**       | error payload | -                |
+| **4xx**     | error payload | -                |
+| **5xx**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -232,7 +233,8 @@ except ApiException as e:
 | Status code | Description        | Response headers |
 | ----------- | ------------------ | ---------------- |
 | **200**     | List of EntityType | -                |
-| **0**       | error payload      | -                |
+| **4xx**     | error payload      | -                |
+| **5xx**     | error payload      | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)

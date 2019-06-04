@@ -47,11 +47,11 @@ class SubscriptionBodySubjectConditions {
       obj = obj || new SubscriptionBodySubjectConditions();
 
       if (data.hasOwnProperty('attrs')) {
-        obj.attrs = ApiClient.convertToType(data.attrs, ['String']);
+        obj['attrs'] = ApiClient.convertToType(data['attrs'], ['String']);
       }
       if (data.hasOwnProperty('expression')) {
-        obj.expression = BatchQueryExpression.constructFromObject(
-          data.expression
+        obj['expression'] = BatchQueryExpression.constructFromObject(
+          data['expression']
         );
       }
     }
@@ -62,11 +62,11 @@ class SubscriptionBodySubjectConditions {
 /**
  * @member {Array.<String>} attrs
  */
-SubscriptionBodySubjectConditions.prototype.attrs = undefined;
+SubscriptionBodySubjectConditions.prototype['attrs'] = undefined;
 
 /**
  * @member {module:model/BatchQueryExpression} expression
  */
-SubscriptionBodySubjectConditions.prototype.expression = undefined;
+SubscriptionBodySubjectConditions.prototype['expression'] = undefined;
 
 export default SubscriptionBodySubjectConditions;

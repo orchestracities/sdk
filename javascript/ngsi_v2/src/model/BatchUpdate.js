@@ -36,8 +36,8 @@ class BatchUpdate {
    * Only for internal use.
    */
   static initialize(obj, actionType, entities) {
-    obj.actionType = actionType;
-    obj.entities = entities;
+    obj['actionType'] = actionType;
+    obj['entities'] = entities;
   }
 
   /**
@@ -52,10 +52,13 @@ class BatchUpdate {
       obj = obj || new BatchUpdate();
 
       if (data.hasOwnProperty('actionType')) {
-        obj.actionType = ApiClient.convertToType(data.actionType, 'String');
+        obj['actionType'] = ApiClient.convertToType(
+          data['actionType'],
+          'String'
+        );
       }
       if (data.hasOwnProperty('entities')) {
-        obj.entities = ApiClient.convertToType(data.entities, [Entity]);
+        obj['entities'] = ApiClient.convertToType(data['entities'], [Entity]);
       }
     }
     return obj;
@@ -65,19 +68,19 @@ class BatchUpdate {
 /**
  * @member {module:model/BatchUpdate.ActionTypeEnum} actionType
  */
-BatchUpdate.prototype.actionType = undefined;
+BatchUpdate.prototype['actionType'] = undefined;
 
 /**
  * @member {Array.<module:model/Entity>} entities
  */
-BatchUpdate.prototype.entities = undefined;
+BatchUpdate.prototype['entities'] = undefined;
 
 /**
  * Allowed values for the <code>actionType</code> property.
  * @enum {String}
  * @readonly
  */
-BatchUpdate.ActionTypeEnum = {
+BatchUpdate['ActionTypeEnum'] = {
   /**
    * value: "append"
    * @const

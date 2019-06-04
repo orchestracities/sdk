@@ -48,14 +48,18 @@ class DataProvided {
       obj = obj || new DataProvided();
 
       if (data.hasOwnProperty('entities')) {
-        obj.entities = ApiClient.convertToType(data.entities, [QueryPattern]);
+        obj['entities'] = ApiClient.convertToType(data['entities'], [
+          QueryPattern,
+        ]);
       }
       if (data.hasOwnProperty('attributes')) {
-        obj.attributes = ApiClient.convertToType(data.attributes, ['String']);
+        obj['attributes'] = ApiClient.convertToType(data['attributes'], [
+          'String',
+        ]);
       }
       if (data.hasOwnProperty('expression')) {
-        obj.expression = DataProvidedExpression.constructFromObject(
-          data.expression
+        obj['expression'] = DataProvidedExpression.constructFromObject(
+          data['expression']
         );
       }
     }
@@ -66,16 +70,16 @@ class DataProvided {
 /**
  * @member {Array.<module:model/QueryPattern>} entities
  */
-DataProvided.prototype.entities = undefined;
+DataProvided.prototype['entities'] = undefined;
 
 /**
  * @member {Array.<String>} attributes
  */
-DataProvided.prototype.attributes = undefined;
+DataProvided.prototype['attributes'] = undefined;
 
 /**
  * @member {module:model/DataProvidedExpression} expression
  */
-DataProvided.prototype.expression = undefined;
+DataProvided.prototype['expression'] = undefined;
 
 export default DataProvided;

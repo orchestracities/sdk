@@ -36,9 +36,9 @@ class Attribute {
    * Only for internal use.
    */
   static initialize(obj, value, type, metadata) {
-    obj.value = value;
-    obj.type = type;
-    obj.metadata = metadata;
+    obj['value'] = value;
+    obj['type'] = type;
+    obj['metadata'] = metadata;
   }
 
   /**
@@ -53,13 +53,13 @@ class Attribute {
       obj = obj || new Attribute();
 
       if (data.hasOwnProperty('value')) {
-        obj.value = ApiClient.convertToType(data.value, Object);
+        obj['value'] = ApiClient.convertToType(data['value'], Object);
       }
       if (data.hasOwnProperty('type')) {
-        obj.type = ApiClient.convertToType(data.type, 'String');
+        obj['type'] = ApiClient.convertToType(data['type'], 'String');
       }
       if (data.hasOwnProperty('metadata')) {
-        obj.metadata = ApiClient.convertToType(data.metadata, Object);
+        obj['metadata'] = ApiClient.convertToType(data['metadata'], Object);
       }
     }
     return obj;
@@ -69,16 +69,16 @@ class Attribute {
 /**
  * @member {Object} value
  */
-Attribute.prototype.value = undefined;
+Attribute.prototype['value'] = undefined;
 
 /**
  * @member {String} type
  */
-Attribute.prototype.type = undefined;
+Attribute.prototype['type'] = undefined;
 
 /**
  * @member {Object} metadata
  */
-Attribute.prototype.metadata = undefined;
+Attribute.prototype['metadata'] = undefined;
 
 export default Attribute;

@@ -38,9 +38,9 @@ class Subscription {
    * Only for internal use.
    */
   static initialize(obj, id, subject, notification) {
-    obj.id = id;
-    obj.subject = subject;
-    obj.notification = notification;
+    obj['id'] = id;
+    obj['subject'] = subject;
+    obj['notification'] = notification;
   }
 
   /**
@@ -55,27 +55,35 @@ class Subscription {
       obj = obj || new Subscription();
 
       if (data.hasOwnProperty('id')) {
-        obj.id = ApiClient.convertToType(data.id, 'String');
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
       }
       if (data.hasOwnProperty('description')) {
-        obj.description = ApiClient.convertToType(data.description, 'String');
+        obj['description'] = ApiClient.convertToType(
+          data['description'],
+          'String'
+        );
       }
       if (data.hasOwnProperty('subject')) {
-        obj.subject = SubscriptionBodySubject.constructFromObject(data.subject);
+        obj['subject'] = SubscriptionBodySubject.constructFromObject(
+          data['subject']
+        );
       }
       if (data.hasOwnProperty('notification')) {
-        obj.notification = SubscriptionBodyNotification.constructFromObject(
-          data.notification
+        obj['notification'] = SubscriptionBodyNotification.constructFromObject(
+          data['notification']
         );
       }
       if (data.hasOwnProperty('expires')) {
-        obj.expires = ApiClient.convertToType(data.expires, 'Date');
+        obj['expires'] = ApiClient.convertToType(data['expires'], 'Date');
       }
       if (data.hasOwnProperty('status')) {
-        obj.status = ApiClient.convertToType(data.status, 'String');
+        obj['status'] = ApiClient.convertToType(data['status'], 'String');
       }
       if (data.hasOwnProperty('throttling')) {
-        obj.throttling = ApiClient.convertToType(data.throttling, 'Number');
+        obj['throttling'] = ApiClient.convertToType(
+          data['throttling'],
+          'Number'
+        );
       }
     }
     return obj;
@@ -85,44 +93,44 @@ class Subscription {
 /**
  * @member {String} id
  */
-Subscription.prototype.id = undefined;
+Subscription.prototype['id'] = undefined;
 
 /**
  * @member {String} description
  */
-Subscription.prototype.description = undefined;
+Subscription.prototype['description'] = undefined;
 
 /**
  * @member {module:model/SubscriptionBodySubject} subject
  */
-Subscription.prototype.subject = undefined;
+Subscription.prototype['subject'] = undefined;
 
 /**
  * @member {module:model/SubscriptionBodyNotification} notification
  */
-Subscription.prototype.notification = undefined;
+Subscription.prototype['notification'] = undefined;
 
 /**
  * @member {Date} expires
  */
-Subscription.prototype.expires = undefined;
+Subscription.prototype['expires'] = undefined;
 
 /**
  * @member {module:model/Subscription.StatusEnum} status
  */
-Subscription.prototype.status = undefined;
+Subscription.prototype['status'] = undefined;
 
 /**
  * @member {Number} throttling
  */
-Subscription.prototype.throttling = undefined;
+Subscription.prototype['throttling'] = undefined;
 
 /**
  * Allowed values for the <code>status</code> property.
  * @enum {String}
  * @readonly
  */
-Subscription.StatusEnum = {
+Subscription['StatusEnum'] = {
   /**
    * value: "active"
    * @const

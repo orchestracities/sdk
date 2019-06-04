@@ -36,9 +36,9 @@ class EntityType {
    * Only for internal use.
    */
   static initialize(obj, attrs, count, type) {
-    obj.attrs = attrs;
-    obj.count = count;
-    obj.type = type;
+    obj['attrs'] = attrs;
+    obj['count'] = count;
+    obj['type'] = type;
   }
 
   /**
@@ -53,13 +53,13 @@ class EntityType {
       obj = obj || new EntityType();
 
       if (data.hasOwnProperty('attrs')) {
-        obj.attrs = ApiClient.convertToType(data.attrs, Object);
+        obj['attrs'] = ApiClient.convertToType(data['attrs'], Object);
       }
       if (data.hasOwnProperty('count')) {
-        obj.count = ApiClient.convertToType(data.count, 'Number');
+        obj['count'] = ApiClient.convertToType(data['count'], 'Number');
       }
       if (data.hasOwnProperty('type')) {
-        obj.type = ApiClient.convertToType(data.type, 'String');
+        obj['type'] = ApiClient.convertToType(data['type'], 'String');
       }
     }
     return obj;
@@ -69,16 +69,16 @@ class EntityType {
 /**
  * @member {Object} attrs
  */
-EntityType.prototype.attrs = undefined;
+EntityType.prototype['attrs'] = undefined;
 
 /**
  * @member {Number} count
  */
-EntityType.prototype.count = undefined;
+EntityType.prototype['count'] = undefined;
 
 /**
  * @member {String} type
  */
-EntityType.prototype.type = undefined;
+EntityType.prototype['type'] = undefined;
 
 export default EntityType;

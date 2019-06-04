@@ -38,9 +38,9 @@ class Registration {
    * Only for internal use.
    */
   static initialize(obj, id, provider, dataProvided) {
-    obj.id = id;
-    obj.provider = provider;
-    obj.dataProvided = dataProvided;
+    obj['id'] = id;
+    obj['provider'] = provider;
+    obj['dataProvided'] = dataProvided;
   }
 
   /**
@@ -55,22 +55,27 @@ class Registration {
       obj = obj || new Registration();
 
       if (data.hasOwnProperty('id')) {
-        obj.id = ApiClient.convertToType(data.id, 'String');
+        obj['id'] = ApiClient.convertToType(data['id'], 'String');
       }
       if (data.hasOwnProperty('description')) {
-        obj.description = ApiClient.convertToType(data.description, 'String');
+        obj['description'] = ApiClient.convertToType(
+          data['description'],
+          'String'
+        );
       }
       if (data.hasOwnProperty('provider')) {
-        obj.provider = Provider.constructFromObject(data.provider);
+        obj['provider'] = Provider.constructFromObject(data['provider']);
       }
       if (data.hasOwnProperty('dataProvided')) {
-        obj.dataProvided = DataProvided.constructFromObject(data.dataProvided);
+        obj['dataProvided'] = DataProvided.constructFromObject(
+          data['dataProvided']
+        );
       }
       if (data.hasOwnProperty('expires')) {
-        obj.expires = ApiClient.convertToType(data.expires, 'Date');
+        obj['expires'] = ApiClient.convertToType(data['expires'], 'Date');
       }
       if (data.hasOwnProperty('status')) {
-        obj.status = ApiClient.convertToType(data.status, 'String');
+        obj['status'] = ApiClient.convertToType(data['status'], 'String');
       }
     }
     return obj;
@@ -80,39 +85,39 @@ class Registration {
 /**
  * @member {String} id
  */
-Registration.prototype.id = undefined;
+Registration.prototype['id'] = undefined;
 
 /**
  * @member {String} description
  */
-Registration.prototype.description = undefined;
+Registration.prototype['description'] = undefined;
 
 /**
  * @member {module:model/Provider} provider
  */
-Registration.prototype.provider = undefined;
+Registration.prototype['provider'] = undefined;
 
 /**
  * @member {module:model/DataProvided} dataProvided
  */
-Registration.prototype.dataProvided = undefined;
+Registration.prototype['dataProvided'] = undefined;
 
 /**
  * @member {Date} expires
  */
-Registration.prototype.expires = undefined;
+Registration.prototype['expires'] = undefined;
 
 /**
  * @member {module:model/Registration.StatusEnum} status
  */
-Registration.prototype.status = undefined;
+Registration.prototype['status'] = undefined;
 
 /**
  * Allowed values for the <code>status</code> property.
  * @enum {String}
  * @readonly
  */
-Registration.StatusEnum = {
+Registration['StatusEnum'] = {
   /**
    * value: "active"
    * @const

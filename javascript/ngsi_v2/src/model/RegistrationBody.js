@@ -37,8 +37,8 @@ class RegistrationBody {
    * Only for internal use.
    */
   static initialize(obj, provider, dataProvided) {
-    obj.provider = provider;
-    obj.dataProvided = dataProvided;
+    obj['provider'] = provider;
+    obj['dataProvided'] = dataProvided;
   }
 
   /**
@@ -53,19 +53,24 @@ class RegistrationBody {
       obj = obj || new RegistrationBody();
 
       if (data.hasOwnProperty('description')) {
-        obj.description = ApiClient.convertToType(data.description, 'String');
+        obj['description'] = ApiClient.convertToType(
+          data['description'],
+          'String'
+        );
       }
       if (data.hasOwnProperty('provider')) {
-        obj.provider = Provider.constructFromObject(data.provider);
+        obj['provider'] = Provider.constructFromObject(data['provider']);
       }
       if (data.hasOwnProperty('dataProvided')) {
-        obj.dataProvided = DataProvided.constructFromObject(data.dataProvided);
+        obj['dataProvided'] = DataProvided.constructFromObject(
+          data['dataProvided']
+        );
       }
       if (data.hasOwnProperty('expires')) {
-        obj.expires = ApiClient.convertToType(data.expires, 'Date');
+        obj['expires'] = ApiClient.convertToType(data['expires'], 'Date');
       }
       if (data.hasOwnProperty('status')) {
-        obj.status = ApiClient.convertToType(data.status, 'String');
+        obj['status'] = ApiClient.convertToType(data['status'], 'String');
       }
     }
     return obj;
@@ -75,34 +80,34 @@ class RegistrationBody {
 /**
  * @member {String} description
  */
-RegistrationBody.prototype.description = undefined;
+RegistrationBody.prototype['description'] = undefined;
 
 /**
  * @member {module:model/Provider} provider
  */
-RegistrationBody.prototype.provider = undefined;
+RegistrationBody.prototype['provider'] = undefined;
 
 /**
  * @member {module:model/DataProvided} dataProvided
  */
-RegistrationBody.prototype.dataProvided = undefined;
+RegistrationBody.prototype['dataProvided'] = undefined;
 
 /**
  * @member {Date} expires
  */
-RegistrationBody.prototype.expires = undefined;
+RegistrationBody.prototype['expires'] = undefined;
 
 /**
  * @member {module:model/RegistrationBody.StatusEnum} status
  */
-RegistrationBody.prototype.status = undefined;
+RegistrationBody.prototype['status'] = undefined;
 
 /**
  * Allowed values for the <code>status</code> property.
  * @enum {String}
  * @readonly
  */
-RegistrationBody.StatusEnum = {
+RegistrationBody['StatusEnum'] = {
   /**
    * value: "active"
    * @const

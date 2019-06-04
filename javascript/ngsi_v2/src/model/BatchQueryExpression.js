@@ -46,19 +46,19 @@ class BatchQueryExpression {
       obj = obj || new BatchQueryExpression();
 
       if (data.hasOwnProperty('q')) {
-        obj.q = ApiClient.convertToType(data.q, 'String');
+        obj['q'] = ApiClient.convertToType(data['q'], 'String');
       }
       if (data.hasOwnProperty('mq')) {
-        obj.mq = ApiClient.convertToType(data.mq, 'String');
+        obj['mq'] = ApiClient.convertToType(data['mq'], 'String');
       }
       if (data.hasOwnProperty('georel')) {
-        obj.georel = ApiClient.convertToType(data.georel, 'String');
+        obj['georel'] = ApiClient.convertToType(data['georel'], 'String');
       }
       if (data.hasOwnProperty('geometry')) {
-        obj.geometry = ApiClient.convertToType(data.geometry, 'String');
+        obj['geometry'] = ApiClient.convertToType(data['geometry'], 'String');
       }
       if (data.hasOwnProperty('coords')) {
-        obj.coords = ApiClient.convertToType(data.coords, 'String');
+        obj['coords'] = ApiClient.convertToType(data['coords'], 'String');
       }
     }
     return obj;
@@ -68,26 +68,26 @@ class BatchQueryExpression {
 /**
  * @member {String} q
  */
-BatchQueryExpression.prototype.q = undefined;
+BatchQueryExpression.prototype['q'] = undefined;
 
 /**
  * @member {String} mq
  */
-BatchQueryExpression.prototype.mq = undefined;
+BatchQueryExpression.prototype['mq'] = undefined;
 
 /**
  * @member {String} georel
  */
-BatchQueryExpression.prototype.georel = undefined;
+BatchQueryExpression.prototype['georel'] = undefined;
 
 /**
  * @member {String} geometry
  */
-BatchQueryExpression.prototype.geometry = undefined;
+BatchQueryExpression.prototype['geometry'] = undefined;
 
 /**
  * @member {String} coords
  */
-BatchQueryExpression.prototype.coords = undefined;
+BatchQueryExpression.prototype['coords'] = undefined;
 
 export default BatchQueryExpression;

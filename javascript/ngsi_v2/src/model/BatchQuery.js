@@ -48,18 +48,20 @@ class BatchQuery {
       obj = obj || new BatchQuery();
 
       if (data.hasOwnProperty('entities')) {
-        obj.entities = ApiClient.convertToType(data.entities, [QueryPattern]);
+        obj['entities'] = ApiClient.convertToType(data['entities'], [
+          QueryPattern,
+        ]);
       }
       if (data.hasOwnProperty('attrs')) {
-        obj.attrs = ApiClient.convertToType(data.attrs, ['String']);
+        obj['attrs'] = ApiClient.convertToType(data['attrs'], ['String']);
       }
       if (data.hasOwnProperty('expression')) {
-        obj.expression = BatchQueryExpression.constructFromObject(
-          data.expression
+        obj['expression'] = BatchQueryExpression.constructFromObject(
+          data['expression']
         );
       }
       if (data.hasOwnProperty('metadata')) {
-        obj.metadata = ApiClient.convertToType(data.metadata, ['String']);
+        obj['metadata'] = ApiClient.convertToType(data['metadata'], ['String']);
       }
     }
     return obj;
@@ -69,21 +71,21 @@ class BatchQuery {
 /**
  * @member {Array.<module:model/QueryPattern>} entities
  */
-BatchQuery.prototype.entities = undefined;
+BatchQuery.prototype['entities'] = undefined;
 
 /**
  * @member {Array.<String>} attrs
  */
-BatchQuery.prototype.attrs = undefined;
+BatchQuery.prototype['attrs'] = undefined;
 
 /**
  * @member {module:model/BatchQueryExpression} expression
  */
-BatchQuery.prototype.expression = undefined;
+BatchQuery.prototype['expression'] = undefined;
 
 /**
  * @member {Array.<String>} metadata
  */
-BatchQuery.prototype.metadata = undefined;
+BatchQuery.prototype['metadata'] = undefined;
 
 export default BatchQuery;

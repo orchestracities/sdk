@@ -51,7 +51,7 @@ export default class EntitiesApi {
    */
   createEntity(requestBody, opts, callback) {
     opts = opts || {};
-    const postBody = requestBody;
+    let postBody = requestBody;
     // verify the required parameter 'requestBody' is set
     if (requestBody === undefined || requestBody === null) {
       throw new Error(
@@ -59,20 +59,20 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {};
-    const queryParams = {
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities',
       'POST',
@@ -123,36 +123,36 @@ export default class EntitiesApi {
    */
   listEntities(opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
 
-    const pathParams = {};
-    const queryParams = {
-      id: opts.id,
-      type: opts.type,
-      idPattern: opts.idPattern,
-      typePattern: opts.typePattern,
-      q: opts.q,
-      mq: opts.mq,
-      georel: opts.georel,
-      geometry: opts.geometry,
-      coords: opts.coords,
-      limit: opts.limit,
-      offset: opts.offset,
-      attrs: opts.attrs,
-      metadata: opts.metadata,
-      orderBy: opts.orderBy,
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      id: opts['id'],
+      type: opts['type'],
+      idPattern: opts['idPattern'],
+      typePattern: opts['typePattern'],
+      q: opts['q'],
+      mq: opts['mq'],
+      georel: opts['georel'],
+      geometry: opts['geometry'],
+      coords: opts['coords'],
+      limit: opts['limit'],
+      offset: opts['offset'],
+      attrs: opts['attrs'],
+      metadata: opts['metadata'],
+      orderBy: opts['orderBy'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = [Entity];
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = [Entity];
     return this.apiClient.callApi(
       '/entities',
       'GET',
@@ -189,7 +189,7 @@ export default class EntitiesApi {
    */
   removeEntity(entityId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -197,22 +197,22 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
+    let pathParams = {
+      entityId: entityId,
     };
-    const queryParams = {
-      type: opts.type,
+    let queryParams = {
+      type: opts['type'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}',
       'DELETE',
@@ -251,7 +251,7 @@ export default class EntitiesApi {
    */
   replaceAllEntityAttributes(entityId, body, opts, callback) {
     opts = opts || {};
-    const postBody = body;
+    let postBody = body;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -265,23 +265,23 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
+    let pathParams = {
+      entityId: entityId,
     };
-    const queryParams = {
-      type: opts.type,
-      options: opts.options,
+    let queryParams = {
+      type: opts['type'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs',
       'PUT',
@@ -322,7 +322,7 @@ export default class EntitiesApi {
    */
   retrieveEntity(entityId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -330,25 +330,25 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
+    let pathParams = {
+      entityId: entityId,
     };
-    const queryParams = {
-      type: opts.type,
-      attrs: opts.attrs,
-      metadata: opts.metadata,
-      options: opts.options,
+    let queryParams = {
+      type: opts['type'],
+      attrs: opts['attrs'],
+      metadata: opts['metadata'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = Entity;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = Entity;
     return this.apiClient.callApi(
       '/entities/{entityId}',
       'GET',
@@ -389,7 +389,7 @@ export default class EntitiesApi {
    */
   retrieveEntityAttributes(entityId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -397,25 +397,25 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
+    let pathParams = {
+      entityId: entityId,
     };
-    const queryParams = {
-      type: opts.type,
-      attrs: opts.attrs,
-      metadata: opts.metadata,
-      options: opts.options,
+    let queryParams = {
+      type: opts['type'],
+      attrs: opts['attrs'],
+      metadata: opts['metadata'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = Object;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = Object;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs',
       'GET',
@@ -454,7 +454,7 @@ export default class EntitiesApi {
    */
   updateExistingEntityAttributes(entityId, body, opts, callback) {
     opts = opts || {};
-    const postBody = body;
+    let postBody = body;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -468,23 +468,23 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
+    let pathParams = {
+      entityId: entityId,
     };
-    const queryParams = {
-      type: opts.type,
-      options: opts.options,
+    let queryParams = {
+      type: opts['type'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs',
       'PATCH',
@@ -523,7 +523,7 @@ export default class EntitiesApi {
    */
   updateOrAppendEntityAttributes(entityId, body, opts, callback) {
     opts = opts || {};
-    const postBody = body;
+    let postBody = body;
     // verify the required parameter 'entityId' is set
     if (entityId === undefined || entityId === null) {
       throw new Error(
@@ -537,23 +537,23 @@ export default class EntitiesApi {
       );
     }
 
-    const pathParams = {
-      entityId,
+    let pathParams = {
+      entityId: entityId,
     };
-    const queryParams = {
-      type: opts.type,
-      options: opts.options,
+    let queryParams = {
+      type: opts['type'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/entities/{entityId}/attrs',
       'POST',

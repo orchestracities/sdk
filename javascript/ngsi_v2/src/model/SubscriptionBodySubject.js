@@ -48,11 +48,15 @@ class SubscriptionBodySubject {
       obj = obj || new SubscriptionBodySubject();
 
       if (data.hasOwnProperty('entities')) {
-        obj.entities = ApiClient.convertToType(data.entities, [QueryPattern]);
+        obj['entities'] = ApiClient.convertToType(data['entities'], [
+          QueryPattern,
+        ]);
       }
       if (data.hasOwnProperty('conditions')) {
-        obj.conditions = SubscriptionBodySubjectConditions.constructFromObject(
-          data.conditions
+        obj[
+          'conditions'
+        ] = SubscriptionBodySubjectConditions.constructFromObject(
+          data['conditions']
         );
       }
     }
@@ -63,11 +67,11 @@ class SubscriptionBodySubject {
 /**
  * @member {Array.<module:model/QueryPattern>} entities
  */
-SubscriptionBodySubject.prototype.entities = undefined;
+SubscriptionBodySubject.prototype['entities'] = undefined;
 
 /**
  * @member {module:model/SubscriptionBodySubjectConditions} conditions
  */
-SubscriptionBodySubject.prototype.conditions = undefined;
+SubscriptionBodySubject.prototype['conditions'] = undefined;
 
 export default SubscriptionBodySubject;

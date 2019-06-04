@@ -124,7 +124,7 @@ class ApiClient {
       path = '/' + path;
     }
 
-    let url = this.basePath + path;
+    var url = this.basePath + path;
 
     // use API (operation, path) base path if defined
     if (apiBasePath !== null && apiBasePath !== undefined) {
@@ -132,7 +132,7 @@ class ApiClient {
     }
 
     url = url.replace(/\{([\w-]+)\}/g, (fullMatch, key) => {
-      let value;
+      var value;
       if (pathParams.hasOwnProperty(key)) {
         value = this.paramToString(pathParams[key]);
       } else {
@@ -168,7 +168,7 @@ class ApiClient {
    * @returns {String} The chosen content type, preferring JSON.
    */
   jsonPreferredMime(contentTypes) {
-    for (let i = 0; i < contentTypes.length; i++) {
+    for (var i = 0; i < contentTypes.length; i++) {
       if (this.isJsonMime(contentTypes[i])) {
         return contentTypes[i];
       }
@@ -223,14 +223,14 @@ class ApiClient {
    * @returns {Object.<String, Object>} normalized parameters.
    */
   normalizeParams(params) {
-    const newParams = {};
-    for (const key in params) {
+    var newParams = {};
+    for (var key in params) {
       if (
         params.hasOwnProperty(key) &&
         params[key] != undefined &&
         params[key] != null
       ) {
-        const value = params[key];
+        var value = params[key];
         if (this.isFileParam(value) || Array.isArray(value)) {
           newParams[key] = value;
         } else {
@@ -277,7 +277,7 @@ class ApiClient {
    */
   applyAuthToRequest(request, authNames) {
     authNames.forEach(authName => {
-      const auth = this.authentications[authName];
+      var auth = this.authentications[authName];
       switch (auth.type) {
         case 'basic':
           if (auth.username || auth.password) {
@@ -293,14 +293,14 @@ class ApiClient {
           break;
         case 'apiKey':
           if (auth.apiKey) {
-            const data = {};
+            var data = {};
             if (auth.apiKeyPrefix) {
               data[auth.name] = auth.apiKeyPrefix + ' ' + auth.apiKey;
             } else {
               data[auth.name] = auth.apiKey;
             }
 
-            if (auth.in === 'header') {
+            if (auth['in'] === 'header') {
               request.set(data);
             } else {
               request.query(data);
@@ -336,7 +336,7 @@ class ApiClient {
 
     // Rely on SuperAgent for parsing response body.
     // See http://visionmedia.github.io/superagent/#parsing-response-bodies
-    let data = response.body;
+    var data = response.body;
     if (
       data == null ||
       (typeof data === 'object' &&
@@ -391,11 +391,11 @@ class ApiClient {
     apiBasePath,
     callback
   ) {
-    const url = this.buildUrl(path, pathParams, apiBasePath);
-    const request = superagent(httpMethod, url);
+    var url = this.buildUrl(path, pathParams, apiBasePath);
+    var request = superagent(httpMethod, url);
 
     if (this.plugins !== null) {
-      for (const index in this.plugins) {
+      for (var index in this.plugins) {
         if (this.plugins.hasOwnProperty(index)) {
           request.use(this.plugins[index]);
         }
@@ -407,7 +407,7 @@ class ApiClient {
 
     // set query parameters
     if (httpMethod.toUpperCase() === 'GET' && this.cache === false) {
-      queryParams._ = new Date().getTime();
+      queryParams['_'] = new Date().getTime();
     }
 
     request.query(this.normalizeParams(queryParams));
@@ -423,21 +423,19 @@ class ApiClient {
     // set request timeout
     request.timeout(this.timeout);
 
-    const contentType = this.jsonPreferredMime(contentTypes);
+    var contentType = this.jsonPreferredMime(contentTypes);
     if (contentType) {
       // Issue with superagent and multipart/form-data (https://github.com/visionmedia/superagent/issues/746)
       if (contentType != 'multipart/form-data') {
         request.type(contentType);
       }
-    } // else if (!request.header['Content-Type']) {
-    //    request.type('application/json');
-    //}
+    }
 
     if (contentType === 'application/x-www-form-urlencoded') {
       request.send(querystring.stringify(this.normalizeParams(formParams)));
     } else if (contentType == 'multipart/form-data') {
-      const _formParams = this.normalizeParams(formParams);
-      for (const key in _formParams) {
+      var _formParams = this.normalizeParams(formParams);
+      for (var key in _formParams) {
         if (_formParams.hasOwnProperty(key)) {
           if (this.isFileParam(_formParams[key])) {
             // file field
@@ -451,7 +449,7 @@ class ApiClient {
       request.send(bodyParam);
     }
 
-    const accept = this.jsonPreferredMime(accepts);
+    var accept = this.jsonPreferredMime(accepts);
     if (accept) {
       request.accept(accept);
     }
@@ -473,7 +471,7 @@ class ApiClient {
 
     request.end((error, response) => {
       if (callback) {
-        let data = null;
+        var data = null;
         if (!error) {
           try {
             data = this.deserialize(response, returnType);
@@ -511,9 +509,7 @@ class ApiClient {
    * @returns An instance of the specified type or null or undefined if data is null or undefined.
    */
   static convertToType(data, type) {
-    if (data === null || data === undefined) {
-      return data;
-    }
+    if (data === null || data === undefined) return data;
 
     switch (type) {
       case 'Boolean':
@@ -537,15 +533,14 @@ class ApiClient {
           return type.constructFromObject(data);
         } else if (Array.isArray(type)) {
           // for array type like: ['String']
-          const itemType = type[0];
+          var itemType = type[0];
 
           return data.map(item => {
             return ApiClient.convertToType(item, itemType);
           });
         } else if (typeof type === 'object') {
           // for plain object type like: {'String': 'Integer'}
-          let keyType;
-          let valueType;
+          var keyType, valueType;
           for (var k in type) {
             if (type.hasOwnProperty(k)) {
               keyType = k;
@@ -554,19 +549,20 @@ class ApiClient {
             }
           }
 
-          const result = {};
+          var result = {};
           for (var k in data) {
             if (data.hasOwnProperty(k)) {
-              const key = ApiClient.convertToType(k, keyType);
-              const value = ApiClient.convertToType(data[k], valueType);
+              var key = ApiClient.convertToType(k, keyType);
+              var value = ApiClient.convertToType(data[k], valueType);
               result[key] = value;
             }
           }
 
           return result;
+        } else {
+          // for unknown type, return the data directly
+          return data;
         }
-        // for unknown type, return the data directly
-        return data;
     }
   }
 
@@ -584,7 +580,7 @@ class ApiClient {
   }
 
   getBasePathFromSettings(index, variables = {}) {
-    const servers = this.hostSettings();
+    var servers = this.hostSettings();
 
     // check array index out of bound
     if (index < 0 || index >= servers.length) {
@@ -596,16 +592,16 @@ class ApiClient {
       );
     }
 
-    const server = servers[index];
-    let url = server.url;
+    var server = servers[index];
+    var url = server['url'];
 
     // go through variable and assign a value
-    for (const variable_name in server.variables) {
+    for (var variable_name in server['variables']) {
       if (variable_name in variables) {
-        const variable = server.variables[variable_name];
+        let variable = server['variables'][variable_name];
         if (
           !('enum_values' in variable) ||
-          variable.enum_values.includes(variables[variable_name])
+          variable['enum_values'].includes(variables[variable_name])
         ) {
           url = url.replace(
             '{' + variable_name + '}',
@@ -618,7 +614,7 @@ class ApiClient {
               '` in the host URL has invalid value ' +
               variables[variable_name] +
               '. Must be ' +
-              server.variables[variable_name].enum_values +
+              server['variables'][variable_name]['enum_values'] +
               '.'
           );
         }
@@ -626,7 +622,7 @@ class ApiClient {
         // use default value
         url = url.replace(
           '{' + variable_name + '}',
-          server.variables[variable_name].default_value
+          server['variables'][variable_name]['default_value']
         );
       }
     }
@@ -640,16 +636,14 @@ class ApiClient {
    */
   static constructFromObject(data, obj, itemType) {
     if (Array.isArray(data)) {
-      for (let i = 0; i < data.length; i++) {
-        if (data.hasOwnProperty(i)) {
+      for (var i = 0; i < data.length; i++) {
+        if (data.hasOwnProperty(i))
           obj[i] = ApiClient.convertToType(data[i], itemType);
-        }
       }
     } else {
-      for (const k in data) {
-        if (data.hasOwnProperty(k)) {
+      for (var k in data) {
+        if (data.hasOwnProperty(k))
           obj[k] = ApiClient.convertToType(data[k], itemType);
-        }
       }
     }
   }

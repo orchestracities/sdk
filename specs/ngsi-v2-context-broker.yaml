@@ -22,7 +22,7 @@ paths:
         - API Entry Point
       operationId: Retrieve API Resources
       responses:
-        200:
+        "200":
           description: ""
           headers:
             Content-Type:
@@ -40,7 +40,13 @@ paths:
                     types_url: /v2/types
                     subscriptions_url: /v2/subscriptions
                     registrations_url: /v2/registrations
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -199,7 +205,7 @@ paths:
               - values
               - unique
       responses:
-        200:
+        "200":
           description: List of entities
           content:
             application/json:
@@ -207,7 +213,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Entity"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -257,21 +269,27 @@ paths:
               $ref: "#/components/schemas/Entity"
         required: true
       responses:
-        201:
+        "201":
           description: When upsert option is not used
           headers:
             Location:
               description: URL of the created entity.
               schema:
                 type: string
-        204:
+        "204":
           description: If upsert option is used
           headers:
             Location:
               description: URL of the created entity.
               schema:
                 type: string
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -352,7 +370,7 @@ paths:
               - values
               - unique
       responses:
-        200:
+        "200":
           description: Single Entity
           headers:
             Content-Type:
@@ -363,7 +381,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Entity"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -409,9 +433,15 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -490,7 +520,7 @@ paths:
               - values
               - unique
       responses:
-        200:
+        "200":
           description: Attributes of an Entity
           headers:
             Content-Type:
@@ -501,7 +531,13 @@ paths:
             application/json:
               schema:
                 type: object
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -563,9 +599,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -635,9 +677,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -699,9 +747,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttributes"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -765,7 +819,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: Attribute of an Entity
           headers:
             Content-Type:
@@ -776,7 +830,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Attribute"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -834,9 +894,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateAttribute"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -888,9 +954,15 @@ paths:
           schema:
             type: string
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -957,7 +1029,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: Attribute Value of an Entity
           content:
             application/json:
@@ -966,7 +1038,13 @@ paths:
             plain/text:
               schema:
                 $ref: "#/components/schemas/AttributeValuePlain"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1046,9 +1124,15 @@ paths:
               $ref: "#/components/schemas/AttributeValuePlain"
         required: true
       responses:
-        200:
+        "200":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1119,7 +1203,7 @@ paths:
               - count
               - values
       responses:
-        200:
+        "200":
           description: List of EntityType
           content:
             application/json:
@@ -1127,7 +1211,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/EntityType"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1174,13 +1264,19 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: EntityType
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/EntityTypeBody"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1233,7 +1329,7 @@ paths:
             enum:
               - count
       responses:
-        200:
+        "200":
           description: ""
           content:
             application/json:
@@ -1241,7 +1337,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Subscription"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1278,14 +1380,20 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateSubscription"
       responses:
-        201:
+        "201":
           description: ""
           headers:
             Location:
               description: URL of the created subscription.
               schema:
                 type: string
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1327,13 +1435,19 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: ""
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Subscription"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1371,9 +1485,15 @@ paths:
           schema:
             type: string
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1413,9 +1533,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateSubscription"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1460,7 +1586,7 @@ paths:
             enum:
               - count
       responses:
-        200:
+        "200":
           description: ""
           content:
             application/json:
@@ -1468,7 +1594,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Registration"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1505,14 +1637,20 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateRegistration"
       responses:
-        201:
+        "201":
           description: ""
           headers:
             Location:
               description: URL of the created registration.
               schema:
                 type: string
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1552,13 +1690,19 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: ""
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Registration"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1601,9 +1745,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/updateRegistration"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1641,9 +1791,15 @@ paths:
           schema:
             type: string
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1696,9 +1852,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/batchUpdate"
       responses:
-        204:
+        "204":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1781,7 +1943,7 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/batchQuery"
       responses:
-        200:
+        "200":
           description: ""
           content:
             application/json:
@@ -1789,7 +1951,13 @@ paths:
                 type: array
                 items:
                    $ref: "#/components/schemas/Entity"
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:
@@ -1838,9 +2006,15 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/batchNotify"
       responses:
-        200:
+        "200":
           description: ""
-        default:
+        "4xx":
+          description: error payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "5xx":
           description: error payload
           content:
             application/json:

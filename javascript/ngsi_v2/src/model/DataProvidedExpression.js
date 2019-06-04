@@ -46,13 +46,13 @@ class DataProvidedExpression {
       obj = obj || new DataProvidedExpression();
 
       if (data.hasOwnProperty('georel')) {
-        obj.georel = ApiClient.convertToType(data.georel, 'String');
+        obj['georel'] = ApiClient.convertToType(data['georel'], 'String');
       }
       if (data.hasOwnProperty('geometry')) {
-        obj.geometry = ApiClient.convertToType(data.geometry, 'String');
+        obj['geometry'] = ApiClient.convertToType(data['geometry'], 'String');
       }
       if (data.hasOwnProperty('coords')) {
-        obj.coords = ApiClient.convertToType(data.coords, 'String');
+        obj['coords'] = ApiClient.convertToType(data['coords'], 'String');
       }
     }
     return obj;
@@ -62,16 +62,16 @@ class DataProvidedExpression {
 /**
  * @member {String} georel
  */
-DataProvidedExpression.prototype.georel = undefined;
+DataProvidedExpression.prototype['georel'] = undefined;
 
 /**
  * @member {String} geometry
  */
-DataProvidedExpression.prototype.geometry = undefined;
+DataProvidedExpression.prototype['geometry'] = undefined;
 
 /**
  * @member {String} coords
  */
-DataProvidedExpression.prototype.coords = undefined;
+DataProvidedExpression.prototype['coords'] = undefined;
 
 export default DataProvidedExpression;

@@ -46,7 +46,7 @@ class SubscriptionBodyNotificationHttp {
       obj = obj || new SubscriptionBodyNotificationHttp();
 
       if (data.hasOwnProperty('url')) {
-        obj.url = ApiClient.convertToType(data.url, 'String');
+        obj['url'] = ApiClient.convertToType(data['url'], 'String');
       }
     }
     return obj;
@@ -56,6 +56,6 @@ class SubscriptionBodyNotificationHttp {
 /**
  * @member {String} url
  */
-SubscriptionBodyNotificationHttp.prototype.url = undefined;
+SubscriptionBodyNotificationHttp.prototype['url'] = undefined;
 
 export default SubscriptionBodyNotificationHttp;

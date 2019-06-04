@@ -35,7 +35,7 @@ class ErrorResponse {
    * Only for internal use.
    */
   static initialize(obj, error) {
-    obj.error = error;
+    obj['error'] = error;
   }
 
   /**
@@ -50,10 +50,13 @@ class ErrorResponse {
       obj = obj || new ErrorResponse();
 
       if (data.hasOwnProperty('error')) {
-        obj.error = ApiClient.convertToType(data.error, 'String');
+        obj['error'] = ApiClient.convertToType(data['error'], 'String');
       }
       if (data.hasOwnProperty('description')) {
-        obj.description = ApiClient.convertToType(data.description, 'String');
+        obj['description'] = ApiClient.convertToType(
+          data['description'],
+          'String'
+        );
       }
     }
     return obj;
@@ -63,11 +66,11 @@ class ErrorResponse {
 /**
  * @member {String} error
  */
-ErrorResponse.prototype.error = undefined;
+ErrorResponse.prototype['error'] = undefined;
 
 /**
  * @member {String} description
  */
-ErrorResponse.prototype.description = undefined;
+ErrorResponse.prototype['description'] = undefined;
 
 export default ErrorResponse;

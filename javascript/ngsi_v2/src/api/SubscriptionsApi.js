@@ -51,7 +51,7 @@ export default class SubscriptionsApi {
    */
   createANewSubscription(subscriptionBody, opts, callback) {
     opts = opts || {};
-    const postBody = subscriptionBody;
+    let postBody = subscriptionBody;
     // verify the required parameter 'subscriptionBody' is set
     if (subscriptionBody === undefined || subscriptionBody === null) {
       throw new Error(
@@ -59,18 +59,18 @@ export default class SubscriptionsApi {
       );
     }
 
-    const pathParams = {};
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let pathParams = {};
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/subscriptions',
       'POST',
@@ -106,7 +106,7 @@ export default class SubscriptionsApi {
    */
   deleteSubscription(subscriptionId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'subscriptionId' is set
     if (subscriptionId === undefined || subscriptionId === null) {
       throw new Error(
@@ -114,20 +114,20 @@ export default class SubscriptionsApi {
       );
     }
 
-    const pathParams = {
-      subscriptionId,
+    let pathParams = {
+      subscriptionId: subscriptionId,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/subscriptions/{subscriptionId}',
       'DELETE',
@@ -164,7 +164,7 @@ export default class SubscriptionsApi {
    */
   retrieveSubscription(subscriptionId, opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
     // verify the required parameter 'subscriptionId' is set
     if (subscriptionId === undefined || subscriptionId === null) {
       throw new Error(
@@ -172,20 +172,20 @@ export default class SubscriptionsApi {
       );
     }
 
-    const pathParams = {
-      subscriptionId,
+    let pathParams = {
+      subscriptionId: subscriptionId,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = Subscription;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = Subscription;
     return this.apiClient.callApi(
       '/subscriptions/{subscriptionId}',
       'GET',
@@ -224,24 +224,24 @@ export default class SubscriptionsApi {
    */
   retrieveSubscriptions(opts, callback) {
     opts = opts || {};
-    const postBody = null;
+    let postBody = null;
 
-    const pathParams = {};
-    const queryParams = {
-      limit: opts.limit,
-      offset: opts.offset,
-      options: opts.options,
+    let pathParams = {};
+    let queryParams = {
+      limit: opts['limit'],
+      offset: opts['offset'],
+      options: opts['options'],
     };
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = [Subscription];
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = [Subscription];
     return this.apiClient.callApi(
       '/subscriptions',
       'GET',
@@ -278,7 +278,7 @@ export default class SubscriptionsApi {
    */
   updateSubscription(subscriptionId, subscriptionBody, opts, callback) {
     opts = opts || {};
-    const postBody = subscriptionBody;
+    let postBody = subscriptionBody;
     // verify the required parameter 'subscriptionId' is set
     if (subscriptionId === undefined || subscriptionId === null) {
       throw new Error(
@@ -292,20 +292,20 @@ export default class SubscriptionsApi {
       );
     }
 
-    const pathParams = {
-      subscriptionId,
+    let pathParams = {
+      subscriptionId: subscriptionId,
     };
-    const queryParams = {};
-    const headerParams = {
-      'Fiware-Service': opts.fiwareService,
-      'Fiware-ServicePath': opts.fiwareServicePath,
+    let queryParams = {};
+    let headerParams = {
+      'Fiware-Service': opts['fiwareService'],
+      'Fiware-ServicePath': opts['fiwareServicePath'],
     };
-    const formParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = ['application/json'];
-    const accepts = ['application/json'];
-    const returnType = null;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = ['application/json'];
+    let accepts = ['application/json'];
+    let returnType = null;
     return this.apiClient.callApi(
       '/subscriptions/{subscriptionId}',
       'PATCH',

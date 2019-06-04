@@ -35,8 +35,8 @@ class EntityTypeBody {
    * Only for internal use.
    */
   static initialize(obj, attrs, count) {
-    obj.attrs = attrs;
-    obj.count = count;
+    obj['attrs'] = attrs;
+    obj['count'] = count;
   }
 
   /**
@@ -51,10 +51,10 @@ class EntityTypeBody {
       obj = obj || new EntityTypeBody();
 
       if (data.hasOwnProperty('attrs')) {
-        obj.attrs = ApiClient.convertToType(data.attrs, Object);
+        obj['attrs'] = ApiClient.convertToType(data['attrs'], Object);
       }
       if (data.hasOwnProperty('count')) {
-        obj.count = ApiClient.convertToType(data.count, 'Number');
+        obj['count'] = ApiClient.convertToType(data['count'], 'Number');
       }
     }
     return obj;
@@ -64,11 +64,11 @@ class EntityTypeBody {
 /**
  * @member {Object} attrs
  */
-EntityTypeBody.prototype.attrs = undefined;
+EntityTypeBody.prototype['attrs'] = undefined;
 
 /**
  * @member {Number} count
  */
-EntityTypeBody.prototype.count = undefined;
+EntityTypeBody.prototype['count'] = undefined;
 
 export default EntityTypeBody;

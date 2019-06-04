@@ -46,17 +46,17 @@ export default class APIEntryPointApi {
    * data is of type: {@link module:model/APIEntryPoint}
    */
   retrieveAPIResources(callback) {
-    const postBody = null;
+    let postBody = null;
 
-    const pathParams = {};
-    const queryParams = {};
-    const headerParams = {};
-    const formParams = {};
+    let pathParams = {};
+    let queryParams = {};
+    let headerParams = {};
+    let formParams = {};
 
-    const authNames = ['ApiKeyAuth', 'BearerAuth'];
-    const contentTypes = [];
-    const accepts = ['application/json'];
-    const returnType = APIEntryPoint;
+    let authNames = ['ApiKeyAuth', 'BearerAuth'];
+    let contentTypes = [];
+    let accepts = ['application/json'];
+    let returnType = APIEntryPoint;
     return this.apiClient.callApi(
       '/',
       'GET',

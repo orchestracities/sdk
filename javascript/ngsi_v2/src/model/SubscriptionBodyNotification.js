@@ -48,19 +48,24 @@ class SubscriptionBodyNotification {
       obj = obj || new SubscriptionBodyNotification();
 
       if (data.hasOwnProperty('attrs')) {
-        obj.attrs = ApiClient.convertToType(data.attrs, 'String');
+        obj['attrs'] = ApiClient.convertToType(data['attrs'], 'String');
       }
       if (data.hasOwnProperty('exceptAttrs')) {
-        obj.exceptAttrs = ApiClient.convertToType(data.exceptAttrs, 'String');
+        obj['exceptAttrs'] = ApiClient.convertToType(
+          data['exceptAttrs'],
+          'String'
+        );
       }
       if (data.hasOwnProperty('http')) {
-        obj.http = SubscriptionBodyNotificationHttp.constructFromObject(
-          data.http
+        obj['http'] = SubscriptionBodyNotificationHttp.constructFromObject(
+          data['http']
         );
       }
       if (data.hasOwnProperty('httpCustom')) {
-        obj.httpCustom = SubscriptionBodyNotificationHttpCustom.constructFromObject(
-          data.httpCustom
+        obj[
+          'httpCustom'
+        ] = SubscriptionBodyNotificationHttpCustom.constructFromObject(
+          data['httpCustom']
         );
       }
     }
@@ -71,21 +76,21 @@ class SubscriptionBodyNotification {
 /**
  * @member {String} attrs
  */
-SubscriptionBodyNotification.prototype.attrs = undefined;
+SubscriptionBodyNotification.prototype['attrs'] = undefined;
 
 /**
  * @member {String} exceptAttrs
  */
-SubscriptionBodyNotification.prototype.exceptAttrs = undefined;
+SubscriptionBodyNotification.prototype['exceptAttrs'] = undefined;
 
 /**
  * @member {module:model/SubscriptionBodyNotificationHttp} http
  */
-SubscriptionBodyNotification.prototype.http = undefined;
+SubscriptionBodyNotification.prototype['http'] = undefined;
 
 /**
  * @member {module:model/SubscriptionBodyNotificationHttpCustom} httpCustom
  */
-SubscriptionBodyNotification.prototype.httpCustom = undefined;
+SubscriptionBodyNotification.prototype['httpCustom'] = undefined;
 
 export default SubscriptionBodyNotification;

@@ -122,7 +122,8 @@ except ApiException as e:
 | Status code | Description                  | Response headers |
 | ----------- | ---------------------------- | ---------------- |
 | **200**     | Attribute Value of an Entity | -                |
-| **0**       | error payload                | -                |
+| **4xx**     | error payload                | -                |
+| **5xx**     | error payload                | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -247,7 +248,8 @@ void (empty response body)
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **200**     |               | -                |
-| **0**       | error payload | -                |
+| **4xx**     | error payload | -                |
+| **5xx**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)

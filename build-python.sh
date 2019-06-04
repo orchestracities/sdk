@@ -21,5 +21,5 @@ do
   t=$(yaml $f info.title)
   v=$(yaml $f info.version)
   echo "Building $t API version $v for Python"
-  pip install -r ./python/$t/requirements.txt install
+  pip install -r ./python/$t/requirements.txt
 done

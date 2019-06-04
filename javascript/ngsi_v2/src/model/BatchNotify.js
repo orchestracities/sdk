@@ -36,8 +36,8 @@ class BatchNotify {
    * Only for internal use.
    */
   static initialize(obj, subscriptionId, data) {
-    obj.subscriptionId = subscriptionId;
-    obj.data = data;
+    obj['subscriptionId'] = subscriptionId;
+    obj['data'] = data;
   }
 
   /**
@@ -52,13 +52,13 @@ class BatchNotify {
       obj = obj || new BatchNotify();
 
       if (data.hasOwnProperty('subscriptionId')) {
-        obj.subscriptionId = ApiClient.convertToType(
-          data.subscriptionId,
+        obj['subscriptionId'] = ApiClient.convertToType(
+          data['subscriptionId'],
           'String'
         );
       }
       if (data.hasOwnProperty('data')) {
-        obj.data = ApiClient.convertToType(data.data, [Entity]);
+        obj['data'] = ApiClient.convertToType(data['data'], [Entity]);
       }
     }
     return obj;
@@ -68,11 +68,11 @@ class BatchNotify {
 /**
  * @member {String} subscriptionId
  */
-BatchNotify.prototype.subscriptionId = undefined;
+BatchNotify.prototype['subscriptionId'] = undefined;
 
 /**
  * @member {Array.<module:model/Entity>} data
  */
-BatchNotify.prototype.data = undefined;
+BatchNotify.prototype['data'] = undefined;
 
 export default BatchNotify;

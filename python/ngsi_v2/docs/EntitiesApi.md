@@ -118,7 +118,8 @@ void (empty response body)
 | ----------- | ------------------------------ | --------------------------------------------- |
 | **201**     | When upsert option is not used | \* Location - URL of the created entity. <br> |
 | **204**     | If upsert option is used       | \* Location - URL of the created entity. <br> |
-| **0**       | error payload                  | -                                             |
+| **4xx**     | error payload                  | -                                             |
+| **5xx**     | error payload                  | -                                             |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -281,7 +282,8 @@ except ApiException as e:
 | Status code | Description      | Response headers |
 | ----------- | ---------------- | ---------------- |
 | **200**     | List of entities | -                |
-| **0**       | error payload    | -                |
+| **4xx**     | error payload    | -                |
+| **5xx**     | error payload    | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -387,7 +389,8 @@ void (empty response body)
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **200**     |               | -                |
-| **0**       | error payload | -                |
+| **4xx**     | error payload | -                |
+| **5xx**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -504,7 +507,8 @@ void (empty response body)
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **204**     |               | -                |
-| **0**       | error payload | -                |
+| **4xx**     | error payload | -                |
+| **5xx**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -628,7 +632,8 @@ except ApiException as e:
 | Status code | Description   | Response headers                        |
 | ----------- | ------------- | --------------------------------------- |
 | **200**     | Single Entity | \* Content-Type - application/json <br> |
-| **0**       | error payload | -                                       |
+| **4xx**     | error payload | -                                       |
+| **5xx**     | error payload | -                                       |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -751,7 +756,8 @@ except ApiException as e:
 | Status code | Description             | Response headers                        |
 | ----------- | ----------------------- | --------------------------------------- |
 | **200**     | Attributes of an Entity | \* Content-Type - application/json <br> |
-| **0**       | error payload           | -                                       |
+| **4xx**     | error payload           | -                                       |
+| **5xx**     | error payload           | -                                       |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -870,7 +876,8 @@ void (empty response body)
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **204**     |               | -                |
-| **0**       | error payload | -                |
+| **4xx**     | error payload | -                |
+| **5xx**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -994,7 +1001,8 @@ void (empty response body)
 | Status code | Description   | Response headers |
 | ----------- | ------------- | ---------------- |
 | **204**     |               | -                |
-| **0**       | error payload | -                |
+| **4xx**     | error payload | -                |
+| **5xx**     | error payload | -                |
 
 [[Back to top]](#)
 [[Back to API list]](../README.md#documentation-for-api-endpoints)
