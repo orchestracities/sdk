@@ -1,9 +1,12 @@
 {
-  "extends": "tamia",
-  "parserOptions": {
-    "sourceType": "module"
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
   },
+  "extends": "eslint:recommended",
   "rules": {
-    "valid-jsdoc": 0
+    "valid-jsdoc": 0,
+    "no-unused-vars": 0
   }
 }
