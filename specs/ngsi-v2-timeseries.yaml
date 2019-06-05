@@ -1,8 +1,8 @@
 openapi: 3.0.1
 tags:
-  - name: FIWARE
-  - name: NGSI
-  - name: QuantumLeap
+  - name: meta
+  - name: input
+  - name: queries
 info:
   title: ngsi_timeseries_v2
   description: QuantumLeap API
@@ -30,18 +30,9 @@ paths:
         200:
           description: Successful response.
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  version:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  version:
-                    type: string
+                $ref: "#/components/schemas/Version"
               example:
                 version: 0.0.1
   /config:
@@ -69,12 +60,9 @@ paths:
         501:
           description: Not implemented!
           content:
-            text/plain:
-              schema:
-                type: string
             application/json:
               schema:
-                type: string
+                $ref: "#/components/schemas/NotImplemented"
   /health:
     get:
       tags:
@@ -89,18 +77,9 @@ paths:
         200:
           description: QuantumLeap health is OK, the service works as expected.
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
+                $ref: "#/components/schemas/Status"
               example:
                 status: pass
         207:
@@ -108,24 +87,9 @@ paths:
             report a warning status, or some of its non-critical dependencies report
             a fail status, so you should double-check.
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  details:
-                    type: object
-                    properties: {}
-                  status:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  details:
-                    type: object
-                    properties: {}
-                  status:
-                    type: string
+                $ref: "#/components/schemas/Status"
               example:
                 status: warn
                 details:
@@ -141,24 +105,9 @@ paths:
           description: QuantumLeap health is NOT OK, as some of its dependencies report
             a failure status.
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  details:
-                    type: object
-                    properties: {}
-                  status:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  details:
-                    type: object
-                    properties: {}
-                  status:
-                    type: string
+                $ref: "#/components/schemas/Status"
               example:
                 status: fail
                 details:
@@ -201,7 +150,7 @@ paths:
           type: string
       requestBody:
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: '#/components/schemas/Notification'
         required: true
@@ -341,22 +290,9 @@ paths:
         400:
           description: Bad Request
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Bad Request
                 description: Orion is not reachable by QuantumLeap at http://foo
@@ -3313,6 +3249,67 @@ paths:
           content: {}
 components:
   schemas:
+    Version:
+      type: object
+      properties:
+        version:
+          type: string
+    NotImplemented:
+      type: string
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+        details:
+          type: object
+          properties: {}
+    ErrorResponse:
+      description: >- 
+        All NGSIv2 server implementations must use the following HTTP response
+        codes and error texts. However, the particular text used for description
+        field is an implementation specific aspect. Error list (HTTP response
+        code in parenthesis): 
+        
+        * `ParseError` (400). The incoming JSON payload cannot be parsed.
+        
+        * `BadRequest` (400). The incoming request is invalid in this context.
+        
+        * `NotFound` (404). The resource (entity, subscription,
+        etc.) referred in the request has not been found.
+        
+        * `TooManyResults`
+        (409). There are several results that match with the resource
+        identification used in the request.
+        
+        * `ContentLengthRequired` (411).
+        Zero/No Content-Length in PUT/POST/PATCH request.
+        
+        * `RequestEntityTooLarge` (413). Payload is too large
+        
+        * `UnsupportedMediaType` (415). Request content type is not supported.
+        
+        * `InvalidModification` (422). Some piece of information is missing in
+        payload.
+        
+        * `NotSupportedQuery` (422). The implementation does not
+        support the query issued.
+        
+        * `NoResourcesAvailable` (413). There are no
+        server resources to fulfill the client request. New error codes may be
+        defined in new iterations of this specificatio."
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+        description:
+          type: string
+      example:
+        error: operation not supported
+        description: >- 
+          this implementation of NGSI v2 does not support the called operation
     Entity:
       required:
       - id
