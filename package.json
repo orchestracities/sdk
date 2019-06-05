@@ -59,7 +59,7 @@
       "git add"
     ],
     "./specs/*.yaml": [
-      "speccy lint",
+      "speccy lint --skip openapi-tags-alphabetical",
       "git add"
     ]
   },
