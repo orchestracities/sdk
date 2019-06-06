@@ -1,0 +1,71 @@
+{
+  "name": "ngsi-sdk",
+  "version": "0.0.1",
+  "description": "An SDK for NGSI v2",
+  "keywords": [
+    "node",
+    "fiware",
+    "ngsi"
+  ],
+  "license": "APACHE 2.0",
+  "author": "Federico Facca <name.surname@martel-innovate.com> (https://martel-innovate.com)",
+  "contributors": [
+    "N/A"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orchestracities/sdk"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-plugin-ie11": "^1.0.0",
+    "eslint-plugin-local-rules": "^0.1.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "husky": "^1.1.0",
+    "jest": "^23.6.0",
+    "lint-staged": "^7.3.0",
+    "memfs": "2.10.1",
+    "prettier": "^1.14.2",
+    "remark-cli": "^6.0.1",
+    "remark-preset-lint-recommended": "^3.0.2",
+    "speccy": "^0.10.1",
+    "swagger-cli": "^2.2.1"
+  },
+  "engines": {
+    "node": ">=8.6"
+  },
+  "scripts": {
+    "lint": "eslint . --cache --fix",
+    "lint:text": "textlint 'README.md' './specs/*.md' './specs/**/*.md' './python/**/*.md' './javascript/**/*.md'",
+    "lint:md": "remark -f 'README.md' './specs' './python' './javascript'",
+    "precommit": "lint-staged",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write **/*.js *.js",
+    "prettier:text": "prettier './*.md' './specs/*.md' './specs/**/*.md' --tab-width 4 --print-width 80 --write --prose-wrap always",
+    "start": "mkdocs serve",
+    "swagger-cli:validate": "swagger-cli validate"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --parser flow --single-quote --trailing-comma es5 --write",
+      "git add"
+    ],
+    "*.md": [
+      "prettier --tab-width 4 --print-width 80 --write --prose-wrap always",
+      "git add"
+    ],
+    "./specs/*.yaml": [
+      "speccy lint",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "prompt": "^1.0.0",
+    "request": "^2.88.0",
+    "ngsi_v2": "file:./javascript/ngsi_v2"
+  }
+}

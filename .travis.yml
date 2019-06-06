@@ -1,0 +1,83 @@
+language: python
+sudo: required
+dist: xenial
+cache: pip
+
+jobs:
+  include:
+    - stage: test
+      name: "Unit Tests 2.7"
+      python: 2.7
+      node_js: 10
+
+      before_install:
+        - pip install flake8
+        # stop the build if there are Python syntax errors, PEP8 violations, undefined names
+        - flake8 . --count --select=E,F821,F822,F823 --max-line-length=127 --show-source --statistics
+        # exit-zero treats all errors as warnings.  GitHub editor is 127 chars wide
+        - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      # install:
+
+      # before_script:
+
+      script:
+        - echo "ok" #should launch pyhton tests
+
+    - stage: test
+      name: "Unit Tests 3.7"
+      python: 3.7
+      node_js: 10
+
+      before_install:
+        - pip install flake8
+        # stop the build if there are Python syntax errors, PEP8 violations, undefined names
+        - flake8 . --count --select=E,F821,F822,F823 --max-line-length=127 --show-source --statistics
+        # exit-zero treats all errors as warnings.  GitHub editor is 127 chars wide
+        - flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      # install:
+
+      # before_script:
+
+      script:
+        - echo "ok" #should launch pyhton tests
+
+    - stage: test
+      name: "Specs Tests"
+      language: node_js
+      node_js: 10
+
+      install:
+        - npm install
+
+      script:
+        - sh validate-specs.sh
+
+    - stage: test
+      name: "Unit Tests nodeJS"
+      language: node_js
+      node_js: 10
+
+      before_install:
+        - sudo add-apt-repository ppa:rmescandon/yq -y
+        - sudo apt update -y
+        - sudo apt install yq -y
+
+      install:
+        - npm install
+
+      script:
+        - npm run lint
+        - bash test-javascript.sh
+
+    - stage: test
+      name: "Documentation Tests"
+      language: node_js
+      node_js: 10
+
+      install:
+        - npm install
+
+      script:
+        - npm run lint:md
