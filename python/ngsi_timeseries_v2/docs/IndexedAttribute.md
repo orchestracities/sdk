@@ -1,0 +1,12 @@
+# IndexedAttribute
+
+## Properties
+
+| Name          | Type                                                        | Description | Notes      |
+| ------------- | ----------------------------------------------------------- | ----------- | ---------- |
+| **types**     | [**list[IndexedAttributeTypes]**](IndexedAttributeTypes.md) |             | [optional] |
+| **attr_name** | **str**                                                     |             | [optional] |
+
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to README]](../README.md)

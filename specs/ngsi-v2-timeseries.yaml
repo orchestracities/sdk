@@ -95,11 +95,11 @@ paths:
                 details:
                   crateDB:
                     status: warn
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
                     output: message-from-crateDB
                   redis:
                     status: warn
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
                     output: raw-error-from-redis
         424:
           description: QuantumLeap health is NOT OK, as some of its dependencies report
@@ -113,24 +113,24 @@ paths:
                 details:
                   crateDB:
                     status: fail
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
                     output: raw-error-from-crateDB
                   orion:
                     status: fail
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
                     output: raw-error-from-orion
                   redis:
                     status: fail
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
                     output: raw-error-from-redis
                   OSM:
                     componentType: system
                     status: pass
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
                   grafana:
                     componentType: system
                     status: pass
-                    time: 2018-01-01T00:00:00Z
+                    time: "2018-01-01T00:00:00Z"
   /notify:
     post:
       tags:
@@ -461,67 +461,26 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      values:
-                        $ref: '#/components/schemas/ValuesArray'
-                      index:
-                        $ref: '#/components/schemas/IndexArray'
-                      entityId:
-                        type: string
-                      attrName:
-                        type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      values:
-                        $ref: '#/components/schemas/ValuesArray'
-                      index:
-                        $ref: '#/components/schemas/IndexArray'
-                      entityId:
-                        type: string
-                      attrName:
-                        type: string
+                $ref: '#/components/schemas/IndexedEntityAttribute'
               example:
-                data:
-                  entityId: Kitchen1
-                  attrName: temperature
-                  index:
-                  - 2018-01-05T15:44:34
-                  - 2018-01-06T15:44:59
-                  - 2018-01-07T15:44:59
-                  values:
-                  - 24.1
-                  - 25.3
-                  - 26.7
+                entityId: Kitchen1
+                attrName: temperature
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                values:
+                - 24.1
+                - 25.3
+                - 26.7
         404:
           description: Not Found
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Not Found
                 description: No records were found for such query.
@@ -683,47 +642,24 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/IndexedValues'
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/IndexedValues'
+                $ref: '#/components/schemas/IndexedValues'
               example:
-                data:
-                  index:
-                  - 2018-01-05T15:44:34
-                  - 2018-01-06T15:44:59
-                  - 2018-01-07T15:44:59
-                  values:
-                  - 24.1
-                  - 25.3
-                  - 26.7
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                values:
+                - 24.1
+                - 25.3
+                - 26.7
         404:
           description: Not Found
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Not Found
                 description: No records were found for such query.
@@ -886,73 +822,32 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      index:
-                        $ref: '#/components/schemas/IndexArray'
-                      entityId:
-                        type: string
-                      attributes:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/AttributeValues'
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      index:
-                        $ref: '#/components/schemas/IndexArray'
-                      entityId:
-                        type: string
-                      attributes:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/AttributeValues'
+                $ref: '#/components/schemas/IndexedEntity'
               example:
-                data:
-                  entityId: Kitchen1
-                  index:
-                  - 2018-01-05T15:44:34
-                  - 2018-01-06T15:44:59
-                  - 2018-01-07T15:44:59
-                  attributes:
-                  - attrName: temperature
-                    values:
-                    - 24.1
-                    - 25.3
-                    - 26.7
-                  - attrName: pressure
-                    values:
-                    - 1.01
-                    - 0.9
-                    - 1.02
+                entityId: Kitchen1
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                attributes:
+                - attrName: temperature
+                  values:
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - attrName: pressure
+                  values:
+                  - 1.01
+                  - 0.9
+                  - 1.02
         404:
           description: Not Found
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Not Found
                 description: No records were found for such query.
@@ -1015,22 +910,9 @@ paths:
         404:
           description: Not Found
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Not Found
                 description: No records were found for such query.
@@ -1193,68 +1075,31 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      values:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/AttributeValues'
-                      index:
-                        $ref: '#/components/schemas/IndexArray'
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      values:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/AttributeValues'
-                      index:
-                        $ref: '#/components/schemas/IndexArray'
+                $ref: '#/components/schemas/IndexedEntityValue'
               example:
-                data:
-                  index:
-                  - 2018-01-05T15:44:34
-                  - 2018-01-06T15:44:59
-                  - 2018-01-07T15:44:59
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                values:
+                - attrName: temperature
                   values:
-                  - attrName: temperature
-                    values:
-                    - 24.1
-                    - 25.3
-                    - 26.7
-                  - attrName: pressure
-                    values:
-                    - 1.01
-                    - 0.9
-                    - 1.02
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - attrName: pressure
+                  values:
+                  - 1.01
+                  - 0.9
+                  - 1.02
         404:
           description: Not Found
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  description:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorResponse"
               example:
                 error: Not Found
                 description: No records were found for such query.
@@ -1428,59 +1273,40 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/EntityIndexedValues'
-                      entityType:
-                        type: string
-                      attrName:
-                        type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/EntityIndexedValues'
-                      entityType:
-                        type: string
-                      attrName:
-                        type: string
+                $ref: '#/components/schemas/IndexedEntityTypeAttribute'
               example:
-                data:
-                  entityType: Room
-                  attrName: temperature
-                  entities:
-                  - entityId: Kitchen1
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    values:
-                    - 24.1
-                    - 25.3
-                    - 26.7
-                  - entityId: Room2
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    values:
-                    - 21.01
-                    - 20.9
-                    - 21.02
+                entityType: Room
+                attrName: temperature
+                entities:
+                - entityId: Kitchen1
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - entityId: Room2
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 21.01
+                  - 20.9
+                  - 21.02
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
   /types/{entityType}/attrs/{attrName}/value:
     get:
       tags:
@@ -1648,49 +1474,37 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/EntityIndexedValues'
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/EntityIndexedValues'
+                $ref: '#/components/schemas/IndexedEntityTypeAttributeValue'
               example:
-                data:
+                - entityId: Kitchen1
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
                   values:
-                  - entityId: Kitchen1
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    values:
-                    - 24.1
-                    - 25.3
-                    - 26.7
-                  - entityId: Room2
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    values:
-                    - 21.01
-                    - 20.9
-                    - 21.02
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - entityId: Room2
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 21.01
+                  - 20.9
+                  - 21.02
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
   /types/{entityType}:
     get:
       tags:
@@ -1860,86 +1674,44 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            index:
-                              $ref: '#/components/schemas/IndexArray'
-                            entityId:
-                              type: string
-                            attributes:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/AttributeValues'
-                      entityType:
-                        type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            index:
-                              $ref: '#/components/schemas/IndexArray'
-                            entityId:
-                              type: string
-                            attributes:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/AttributeValues'
-                      entityType:
-                        type: string
+                $ref: '#/components/schemas/IndexedEntityType'
               example:
-                data:
-                  entityType: Room
-                  entities:
-                  - entityId: Room1
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    attributes:
-                    - attrName: temperature
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - attrName: pressure
-                      values:
-                      - 1.1
-                      - 1.3
-                      - 0.7
-                  - entityId: Room2
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    attributes:
-                    - attrName: temperature
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - attrName: pressure
-                      values:
-                      - 1.1
-                      - 1.3
-                      - 0.7
+                entityType: Room
+                entities:
+                - entityId: Room1
+                  index:
+                  - 2018-01-05T15:44:34
+                  - 2018-01-06T15:44:59
+                  - 2018-01-07T15:44:59
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
+                - entityId: Room2
+                  index:
+                  - 2018-01-05T15:44:34
+                  - 2018-01-06T15:44:59
+                  - 2018-01-07T15:44:59
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
         501:
           description: Not implemented!
           content: {}
@@ -2154,85 +1926,42 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            index:
-                              $ref: '#/components/schemas/IndexArray'
-                            entityId:
-                              type: string
-                            attributes:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/AttributeValues'
-                      entityType:
-                        type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      entities:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            index:
-                              $ref: '#/components/schemas/IndexArray'
-                            entityId:
-                              type: string
-                            attributes:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/AttributeValues'
-                      entityType:
-                        type: string
+                $ref: '#/components/schemas/IndexedEntityTypeValue'
               example:
-                data:
-                  values:
-                  - entityId: Room1
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    attributes:
-                    - attrName: temperature
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - attrName: pressure
-                      values:
-                      - 1.1
-                      - 1.3
-                      - 0.7
-                  - entityId: Room2
-                    index:
-                    - 2018-01-05T15:44:34
-                    - 2018-01-06T15:44:59
-                    - 2018-01-07T15:44:59
-                    attributes:
-                    - attrName: temperature
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - attrName: pressure
-                      values:
-                      - 1.1
-                      - 1.3
-                      - 0.7
+                - entityId: Room1
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
+                - entityId: Room2
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
         501:
           description: Not implemented!
           content: {}
@@ -2370,90 +2099,52 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      types:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            entities:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/EntityIndexedValues'
-                            entityType:
-                              type: string
-                      attrName:
-                        type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      types:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            entities:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/EntityIndexedValues'
-                            entityType:
-                              type: string
-                      attrName:
-                        type: string
+                $ref: '#/components/schemas/IndexedAttribute'
               example:
-                data:
-                  attrName: temperature
-                  types:
-                  - entityType: Room
-                    entities:
-                    - entityId: Room1
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - entityId: Room2
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 22.1
-                      - 23.3
-                      - 25.7
-                  - entityType: Device
-                    entities:
-                    - entityId: DeviceInRoom1
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - entityId: DeviceInRoom2
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 22.1
-                      - 23.3
-                      - 25.7
+                attrName: temperature
+                types:
+                - entityType: Room
+                  entities:
+                  - entityId: Room1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: Room2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
+                - entityType: Device
+                  entities:
+                  - entityId: DeviceInRoom1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: DeviceInRoom2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
         501:
           description: Not implemented!
           content: {}
@@ -2626,89 +2317,50 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      types:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            entities:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/EntityIndexedValues'
-                            entityType:
-                              type: string
-                      attrName:
-                        type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      types:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            entities:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/EntityIndexedValues'
-                            entityType:
-                              type: string
-                      attrName:
-                        type: string
+                $ref: '#/components/schemas/IndexedAttributeValue'
               example:
-                data:
-                  values:
-                  - entityType: Room
-                    entities:
-                    - entityId: Room1
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - entityId: Room2
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 22.1
-                      - 23.3
-                      - 25.7
-                  - entityType: Device
-                    entities:
-                    - entityId: DeviceInRoom1
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 24.1
-                      - 25.3
-                      - 26.7
-                    - entityId: DeviceInRoom2
-                      index:
-                      - 2018-01-05T15:44:34
-                      - 2018-01-06T15:44:59
-                      - 2018-01-07T15:44:59
-                      values:
-                      - 22.1
-                      - 23.3
-                      - 25.7
+                - entityType: Room
+                  entities:
+                  - entityId: Room1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: Room2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
+                - entityType: Device
+                  entities:
+                  - entityId: DeviceInRoom1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: DeviceInRoom2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
         501:
           description: Not implemented!
           content: {}
@@ -2881,101 +2533,52 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      attrs:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            types:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  entities:
-                                    type: array
-                                    items:
-                                      $ref: '#/components/schemas/EntityIndexedValues'
-                                  entityType:
-                                    type: string
-                            attrName:
-                              type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      attrs:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            types:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  entities:
-                                    type: array
-                                    items:
-                                      $ref: '#/components/schemas/EntityIndexedValues'
-                                  entityType:
-                                    type: string
-                            attrName:
-                              type: string
+                $ref: '#/components/schemas/IndexedAllAttribute'
               example:
-                data:
-                  'attrs:':
-                  - attrName: temperature
-                    types:
-                    - entityType: Room
-                      entities:
-                      - entityId: Room1
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 24.1
-                        - 25.3
-                        - 26.7
-                      - entityId: Room2
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 22.1
-                        - 23.3
-                        - 25.7
-                    - entityType: Device
-                      entities:
-                      - entityId: DeviceInRoom1
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 24.1
-                        - 25.3
-                        - 26.7
-                      - entityId: DeviceInRoom2
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 22.1
-                        - 23.3
-                        - 25.7
+                - attrName: temperature
+                  types:
+                  - entityType: Room
+                    entities:
+                    - entityId: Room1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: Room2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
+                  - entityType: Device
+                    entities:
+                    - entityId: DeviceInRoom1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: DeviceInRoom2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
         501:
           description: Not implemented!
           content: {}
@@ -3149,101 +2752,52 @@ paths:
         200:
           description: OK
           content:
-            text/plain:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      values:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            types:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  entities:
-                                    type: array
-                                    items:
-                                      $ref: '#/components/schemas/EntityIndexedValues'
-                                  entityType:
-                                    type: string
-                            attrName:
-                              type: string
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    properties:
-                      values:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            types:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  entities:
-                                    type: array
-                                    items:
-                                      $ref: '#/components/schemas/EntityIndexedValues'
-                                  entityType:
-                                    type: string
-                            attrName:
-                              type: string
+                $ref: '#/components/schemas/IndexedAllAttribute'
               example:
-                data:
-                  'values:':
-                  - attrName: temperature
-                    types:
-                    - entityType: Room
-                      entities:
-                      - entityId: Room1
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 24.1
-                        - 25.3
-                        - 26.7
-                      - entityId: Room2
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 22.1
-                        - 23.3
-                        - 25.7
-                    - entityType: Device
-                      entities:
-                      - entityId: DeviceInRoom1
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 24.1
-                        - 25.3
-                        - 26.7
-                      - entityId: DeviceInRoom2
-                        index:
-                        - 2018-01-05T15:44:34
-                        - 2018-01-06T15:44:59
-                        - 2018-01-07T15:44:59
-                        values:
-                        - 22.1
-                        - 23.3
-                        - 25.7
+                - attrName: temperature
+                  types:
+                  - entityType: Room
+                    entities:
+                    - entityId: Room1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: Room2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
+                  - entityType: Device
+                    entities:
+                    - entityId: DeviceInRoom1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: DeviceInRoom2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
         501:
           description: Not implemented!
           content: {}
@@ -3265,39 +2819,8 @@ components:
           type: object
           properties: {}
     ErrorResponse:
-      description: >- 
-        All NGSIv2 server implementations must use the following HTTP response
-        codes and error texts. However, the particular text used for description
-        field is an implementation specific aspect. Error list (HTTP response
-        code in parenthesis): 
-        
-        * `ParseError` (400). The incoming JSON payload cannot be parsed.
-        
-        * `BadRequest` (400). The incoming request is invalid in this context.
-        
-        * `NotFound` (404). The resource (entity, subscription,
-        etc.) referred in the request has not been found.
-        
-        * `TooManyResults`
-        (409). There are several results that match with the resource
-        identification used in the request.
-        
-        * `ContentLengthRequired` (411).
-        Zero/No Content-Length in PUT/POST/PATCH request.
-        
-        * `RequestEntityTooLarge` (413). Payload is too large
-        
-        * `UnsupportedMediaType` (415). Request content type is not supported.
-        
-        * `InvalidModification` (422). Some piece of information is missing in
-        payload.
-        
-        * `NotSupportedQuery` (422). The implementation does not
-        support the query issued.
-        
-        * `NoResourcesAvailable` (413). There are no
-        server resources to fulfill the client request. New error codes may be
-        defined in new iterations of this specificatio."
+      description: >-
+        Default error response contains an error code, and a description
       type: object
       required:
         - error
@@ -3324,6 +2847,128 @@ components:
           type: string
           description: The NGSI Entity Id.
           example: Kitchen
+    IndexedEntity:
+      type: object
+      properties:
+        index:
+          $ref: '#/components/schemas/IndexArray'
+        entityId:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeValues'
+    IndexedEntityValue:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeValues'
+        index:
+          $ref: '#/components/schemas/IndexArray'    
+    IndexedEntityAttribute:
+      type: object
+      properties:
+        values:
+          $ref: '#/components/schemas/ValuesArray'
+        index:
+          $ref: '#/components/schemas/IndexArray'
+        entityId:
+          type: string
+        attrName:
+          type: string
+    IndexedEntityTypeAttribute:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityIndexedValues'
+        entityType:
+          type: string
+        attrName:
+          type: string
+    IndexedEntityTypeAttributeValue:          
+      type: array
+      items:
+        $ref: '#/components/schemas/EntityIndexedValues'
+    IndexedEntityType:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                $ref: '#/components/schemas/IndexArray'
+              entityId:
+                type: string
+              attributes:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttributeValues'
+        entityType:
+          type: string
+    IndexedEntityTypeValue:
+      type: array
+      items:
+        type: object
+        properties:
+          index:
+            $ref: '#/components/schemas/IndexArray'
+          entityId:
+            type: string
+          attributes:
+            type: array
+            items:
+              $ref: '#/components/schemas/AttributeValues'
+    IndexedAttribute:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            type: object
+            properties:
+              entities:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EntityIndexedValues'
+              entityType:
+                type: string
+        attrName:
+          type: string
+    IndexedAttributeValue:
+      type: array
+      items:
+        type: object
+        properties:
+          entities:
+            type: array
+            items:
+              $ref: '#/components/schemas/EntityIndexedValues'
+          entityType:
+            type: string
+    IndexedAllAttribute:
+      type: array
+      items:
+        type: object
+        properties:
+          types:
+            type: array
+            items:
+              type: object
+              properties:
+                entities:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/EntityIndexedValues'
+                entityType:
+                  type: string
+          attrName:
+            type: string
     IndexArray:
       type: array
       description: Array of the timestamps which are indexes of the response for the
@@ -3381,7 +3026,7 @@ components:
             metadata:
               dateModified:
                 type: DateTime
-                value: 2017-06-19T11:46:45.00Z
+                value: "2017-06-19T11:46:45.00Z"
         - id: Bedroom1
           type: Room
           temperature:
@@ -3390,7 +3035,7 @@ components:
             metadata:
               dateModified:
                 type: DateTime
-                value: 2017-06-19T11:46:45.00Z
+                value: "2017-06-19T11:46:45.00Z"
     EntityIndexedValues:
       type: object
       properties:
