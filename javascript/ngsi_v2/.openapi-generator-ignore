@@ -6,6 +6,10 @@
 
 # As an example, the C# client generator defines ApiClient.cs.
 # You can make changes and tell OpenAPI Generator to ignore just this file by uncommenting the following line:
+#  NOTE: We modified the `ApiClient.js` auto-generated so we have to exclude
+# it from code generation.
+# In fact, we had to suppress the content type header in GET requests
+# to avoid API errors.
 **/ApiClient.js
 
 # You can match any string of characters against a directory, file or extension with a single asterisk (*):

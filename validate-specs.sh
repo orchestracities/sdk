@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 FILES=./specs/*
 for f in $FILES
 do

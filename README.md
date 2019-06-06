@@ -27,3 +27,9 @@ Prerequisites:
 $ npm install
 $ sh generate-code.sh
 ```
+
+Important Note:
+
+We modified the `ApiClient.js` auto-generated so we have to exclude it from code
+generation. In fact, we had to suppress the content type header in GET requests
+to avoid API errors.
