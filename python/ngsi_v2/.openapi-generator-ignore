@@ -8,6 +8,9 @@
 # You can make changes and tell OpenAPI Generator to ignore just this file by uncommenting the following line:
 **/api_client.py
 
+# We modified `api_client.py` so we have to exclude it from code generation.
+# In fact, we had to suppress the content type header in GET requests to avoid API errors.
+
 # You can match any string of characters against a directory, file or extension with a single asterisk (*):
 #foo/*/qux
 # The above matches foo/bar/qux and foo/baz/qux, but not foo/bar/baz/qux
