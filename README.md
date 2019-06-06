@@ -15,7 +15,7 @@ There are a number of scripts to support the build, test and packaging:
 -   `build-python.sh` create a distribution for all `python` SDKs.
 -   `test-javascript.sh` run tests for all the `nodejs` SDKs.
 
-In `examples` we offer we small examples to test the API.
+In `examples` we offer small examples to test the API.
 
 Prerequisites:
 
