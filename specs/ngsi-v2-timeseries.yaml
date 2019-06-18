@@ -1,0 +1,3261 @@
+openapi: 3.0.1
+tags:
+  - name: meta
+  - name: input
+  - name: queries
+info:
+  title: ngsi_timeseries_v2
+  description: QuantumLeap API
+  version: 0.1.2
+  contact:
+    name: OrchestraCities
+    url: https://www.orchestracities.com
+    email: info@orchestracities.com
+  license:
+    name: Apache 2.0
+    url: https://github.com/orchestracities/sdk/blob/master/LICENSE
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+servers:
+  - url: https://api.s.orchestracities.com/timeseries
+paths:
+  /version:
+    get:
+      tags:
+      - meta
+      summary: Returns the version of QuantumLeap.
+      operationId: reporter.version.version
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Version"
+              example:
+                version: 0.0.1
+  /config:
+    post:
+      tags:
+      - meta
+      summary: (To Be Implemented) Customize your persistance configuration to better
+        suit your needs.
+      operationId: reporter.reporter.config
+      parameters:
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: replicas
+        in: query
+        description: The number of replicas to use for the selected types.
+        schema:
+          type: number
+      responses:
+        501:
+          description: Not implemented!
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotImplemented"
+  /health:
+    get:
+      tags:
+      - meta
+      summary: Returns the health-check status of QuantumLeap and the services it
+        depends on.
+      description: |-
+        This endpoint is intended for administrators of QuantumLeap. Using the information returned by this endpoint they can diagnose problems in the service or its dependencies. This information is also useful for cloud tools such as orchestrators and load balancers with rules based on health-checks. Due to the lack of a standardized response format, we base the implementation on the draft of https://inadarei.github.io/rfc-healthcheck/
+        QuantumlLeap's dependencies are the following: - CrateDB: Critical - Redis:   Critical only if geocoding is enabled. - OSM:     Non-critical
+      operationId: reporter.health.get_health
+      responses:
+        200:
+          description: QuantumLeap health is OK, the service works as expected.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+              example:
+                status: pass
+        207:
+          description: QuantumLeap health may be OK, but some of its dependencies
+            report a warning status, or some of its non-critical dependencies report
+            a fail status, so you should double-check.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+              example:
+                status: warn
+                details:
+                  crateDB:
+                    status: warn
+                    time: "2018-01-01T00:00:00Z"
+                    output: message-from-crateDB
+                  redis:
+                    status: warn
+                    time: "2018-01-01T00:00:00Z"
+                    output: raw-error-from-redis
+        424:
+          description: QuantumLeap health is NOT OK, as some of its dependencies report
+            a failure status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+              example:
+                status: fail
+                details:
+                  crateDB:
+                    status: fail
+                    time: "2018-01-01T00:00:00Z"
+                    output: raw-error-from-crateDB
+                  orion:
+                    status: fail
+                    time: "2018-01-01T00:00:00Z"
+                    output: raw-error-from-orion
+                  redis:
+                    status: fail
+                    time: "2018-01-01T00:00:00Z"
+                    output: raw-error-from-redis
+                  OSM:
+                    componentType: system
+                    status: pass
+                    time: "2018-01-01T00:00:00Z"
+                  grafana:
+                    componentType: system
+                    status: pass
+                    time: "2018-01-01T00:00:00Z"
+  /notify:
+    post:
+      tags:
+      - input
+      summary: Notify QuantumLeap the arrival of a new NGSI notification.
+      operationId: reporter.reporter.notify
+      parameters:
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      responses:
+        201:
+          description: Successfully created record.
+          content: {}
+        400:
+          description: Received notification is not valid.
+          content: {}
+        500:
+          description: Internal server error.
+          content: {}
+  /subscribe:
+    post:
+      tags:
+      - input
+      summary: Subscribe QL to process Orion notifications of certain type.
+      description: This endpoint simplifies the creation of the subscription in orion
+        that will generate the notifications to be consumed by QuantumLeap in order
+        to save historical records. If you want an advanced specification of the notifications,
+        you can always create the subscription in orion at your will. This endpoint
+        just aims to simplify the common use case.
+      operationId: reporter.reporter.subscribe
+      parameters:
+      - name: orionUrl
+        in: query
+        description: The url where QuantumLeap can reach Orion. Do not include specific
+          paths, just the base one including the api version. E.g http://my-orion.com:1026/v2
+        required: true
+        schema:
+          type: string
+      - name: quantumleapUrl
+        in: query
+        description: The url where Orion can reach QuantumLeap. Do not include specific
+          paths, just the base one including the api version. E.g http://my-quantumleap.com:8668/v2
+        required: true
+        schema:
+          type: string
+      - name: entityType
+        in: query
+        description: 'The type of entities for which to create a subscription, so
+          as to persist historical data of entities of this type. ATTENTION: If not
+          specified, all entity types will be tracked.'
+        schema:
+          type: string
+      - name: entityId
+        in: query
+        description: Id of the entity to track. If specified, it takes precedence
+          over the idPattern parameter. If absent but an idPattern is given, then
+          QL will use the idPattern to determine which entities to track. If no idPattern
+          is given either, then QL will use the entityType if present. If not even
+          an entityType is given, then QL will fall back to tracking all entities.
+        schema:
+          type: string
+      - name: idPattern
+        in: query
+        description: The pattern covering the entity ids for which to subscribe. If
+          not specified, QL will track all entities of the specified type. This attribute
+          is documented in orion, see https://fiware-orion.readthedocs.io/en/master/user/walkthrough_apiv2/index.html#subscriptions
+        schema:
+          type: string
+      - name: attributes
+        in: query
+        description: 'Comma-separated list of attribute names to track. These attributes
+          are used to narrow the condition that triggers data change notifications---i.e.
+          they will be used to fill the attrs field of the subject''s condition of
+          the Orion subscription QL creates. They will also be used to fill the attrs
+          field of the notification object in the subscription QL creates. (Full details
+          at: http://telefonicaid.github.io/fiware-orion/api/v2/stable/) More specifically,
+          call E the set of entities determined by the given combination of entityType,
+          entityId and idPattern. Then we have a set A of all attributes of entities
+          in E whose name is in attributes. When the value of any of the attributes
+          in A changes, Orion will send QL the current values of those attributes.
+          Note that when using this attributes parameter the set of attributes that
+          Orion will track for changes (observed attributes) is the same as the set
+          of attributes that determine which data Orion will put in notifications
+          (notified attributes). If the two sets need to be different, use the observedAttributes
+          and notifiedAttributes parameters below. (If you supply an attributes parameter,
+          observedAttributes and notifiedAttributes will be ignored.)'
+        schema:
+          type: string
+      - name: observedAttributes
+        in: query
+        description: 'Comma-separated list of attribute names to track. These attributes
+          are used to narrow the condition that triggers data change notifications---i.e.
+          they will be used to fill the attrs field of the subject''s condition of
+          the Orion subscription QL creates. (Full details at: http://telefonicaid.github.io/fiware-orion/api/v2/stable/)
+          More specifically, call E the set of entities determined by the given combination
+          of entityType, entityId and idPattern. Then we have a set A of all attributes
+          of entities in E whose name is in observedAttributes. When the value of
+          any of the attributes in A changes, Orion will send QL the current values
+          of the attributes specified by the notifiedAttributes parameter. If observedAttributes
+          is absent, QL will be notified of any changes to the entities in E.'
+        schema:
+          type: string
+      - name: notifiedAttributes
+        in: query
+        description: 'Comma-separated list of attribute names to be used to restrict
+          the data of which QL will keep a history. This list will be used to set
+          the notification''s attrs field of the subscription that QL creates. (Full
+          details at: http://telefonicaid.github.io/fiware-orion/api/v2/stable/) If
+          not specified, QL will keep a history of all data changes in any of the
+          entities identified by the given combination of entityType, entityId and
+          idPattern.'
+        schema:
+          type: string
+      - name: throttling
+        in: query
+        description: Minimal period of time in seconds which must elapse between two
+          consecutive notifications. This is the value QL will use for the throttling
+          field when creating the subscription. If not specified, it defaults to 1.
+        schema:
+          type: integer
+      - name: timeIndexAttribute
+        in: query
+        description: The name of a custom attribute to be used as a time index. On
+          receiving notifications containing this attribute, QL will use its value
+          as a time series index for the entity being notified. If specified, it should
+          refer to an entity attribute whose value is an ISO 8601 timestamp.
+        schema:
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        201:
+          description: Successfully created subscription.
+          content: {}
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Bad Request
+                description: Orion is not reachable by QuantumLeap at http://foo
+        412:
+          description: You specified an unreachable Orion url for QuantumLeap.
+          content: {}
+        500:
+          description: Internal server error.
+          content: {}
+  /entities/{entityId}/attrs/{attrName}:
+    get:
+      tags:
+      - queries
+      summary: History of an attribute of a given entity instance.
+      description: For example, query max water level of the central tank throughout
+        the last year. Queries can get more sophisticated with the use of filters
+        and query attributes.
+      operationId: reporter.query_1T1E1A.query_1T1E1A
+      parameters:
+      - name: entityId
+        in: path
+        description: The entity id in which the query is restricted on. If the id
+          is unique among all entity types, this could be used to uniquely identify
+          the entity instance. Otherwise, you will have to use the entityType attribute
+          to resolve ambiguity.
+        required: true
+        schema:
+          type: string
+      - name: attrName
+        in: path
+        description: The name of the attribute the query is interested on. It must
+          be a valid attribute of all the entities covered by the query scope.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntityAttribute'
+              example:
+                entityId: Kitchen1
+                attrName: temperature
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                values:
+                - 24.1
+                - 25.3
+                - 26.7
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+  /entities/{entityId}/attrs/{attrName}/value:
+    get:
+      tags:
+      - queries
+      summary: History of an attribute (values only) of a given entity instance.
+      description: Similar to the previous, but focusing on the values regardless
+        of the metadata.
+      operationId: reporter.query_1T1E1A.query_1T1E1A_value
+      parameters:
+      - name: entityId
+        in: path
+        description: The entity id in which the query is restricted on. If the id
+          is unique among all entity types, this could be used to uniquely identify
+          the entity instance. Otherwise, you will have to use the entityType attribute
+          to resolve ambiguity.
+        required: true
+        schema:
+          type: string
+      - name: attrName
+        in: path
+        description: The name of the attribute the query is interested on. It must
+          be a valid attribute of all the entities covered by the query scope.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedValues'
+              example:
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                values:
+                - 24.1
+                - 25.3
+                - 26.7
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+  /entities/{entityId}:
+    get:
+      tags:
+      - queries
+      summary: History of N attributes of a given entity instance.
+      description: For example, query the average pressure, temperature and humidity
+        of this month in the weather station WS1.
+      operationId: reporter.query_1T1ENA.query_1T1ENA
+      parameters:
+      - name: entityId
+        in: path
+        description: The entity id in which the query is restricted on. If the id
+          is unique among all entity types, this could be used to uniquely identify
+          the entity instance. Otherwise, you will have to use the entityType attribute
+          to resolve ambiguity.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: Optional. Comma-separated list of attribute names whose data
+          are to be included in the response. The attributes are retrieved in the
+          order specified by this parameter. If not specified, all attributes are
+          included in the response in arbitrary order.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntity'
+              example:
+                entityId: Kitchen1
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                attributes:
+                - attrName: temperature
+                  values:
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - attrName: pressure
+                  values:
+                  - 1.01
+                  - 0.9
+                  - 1.02
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+    delete:
+      tags:
+      - input
+      summary: Delete historical data of a certain entity.
+      description: Given an entity (with type and id), delete all its historical records.
+      operationId: reporter.delete.delete_entity
+      parameters:
+      - name: entityId
+        in: path
+        description: The entity id in which the query is restricted on. If the id
+          is unique among all entity types, this could be used to uniquely identify
+          the entity instance. Otherwise, you will have to use the entityType attribute
+          to resolve ambiguity.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        204:
+          description: Records successfully deleted.
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+  /entities/{entityId}/value:
+    get:
+      tags:
+      - queries
+      summary: History of N attributes (values only) of a given entity instance.
+      description: For example, query the average pressure, temperature and humidity
+        (values only, no metadata) of this month in the weather station WS1.
+      operationId: reporter.query_1T1ENA.query_1T1ENA_value
+      parameters:
+      - name: entityId
+        in: path
+        description: The entity id in which the query is restricted on. If the id
+          is unique among all entity types, this could be used to uniquely identify
+          the entity instance. Otherwise, you will have to use the entityType attribute
+          to resolve ambiguity.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: Optional. Comma-separated list of attribute names whose data
+          are to be included in the response. The attributes are retrieved in the
+          order specified by this parameter. If not specified, all attributes are
+          included in the response in arbitrary order.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntityValue'
+              example:
+                index:
+                - "2018-01-05T15:44:34"
+                - "2018-01-06T15:44:59"
+                - "2018-01-07T15:44:59"
+                values:
+                - attrName: temperature
+                  values:
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - attrName: pressure
+                  values:
+                  - 1.01
+                  - 0.9
+                  - 1.02
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+  /types/{entityType}/attrs/{attrName}:
+    get:
+      tags:
+      - queries
+      summary: History of an attribute of N entities of the same type.
+      description: For example, query the pressure measurements of this month in all
+        the weather stations. Note in the response, the index and values arrays are
+        parallel. Also, when using aggrMethod, the aggregation is done by-entity instance.
+        In this case, the index array is just the fromDate and toDate values user
+        specified in the request (if any).
+      operationId: reporter.query_1TNE1A.query_1TNE1A
+      parameters:
+      - name: entityType
+        in: path
+        description: The entity type in which the query is restricted on. Used to
+          constraint the search to entities of this type, specially useful when the
+          entity id is not enough to uniquely identify an entity.
+        required: true
+        schema:
+          type: string
+      - name: attrName
+        in: path
+        description: The name of the attribute the query is interested on. It must
+          be a valid attribute of all the entities covered by the query scope.
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntityTypeAttribute'
+              example:
+                entityType: Room
+                attrName: temperature
+                entities:
+                - entityId: Kitchen1
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - entityId: Room2
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 21.01
+                  - 20.9
+                  - 21.02
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+  /types/{entityType}/attrs/{attrName}/value:
+    get:
+      tags:
+      - queries
+      summary: History of an attribute (values only) of N entities of the same type.
+      description: For example, query the average pressure (values only, no metadata)
+        of this month in all the weather stations.
+      operationId: reporter.query_1TNE1A.query_1TNE1A_value
+      parameters:
+      - name: entityType
+        in: path
+        description: The entity type in which the query is restricted on. Used to
+          constraint the search to entities of this type, specially useful when the
+          entity id is not enough to uniquely identify an entity.
+        required: true
+        schema:
+          type: string
+      - name: attrName
+        in: path
+        description: The name of the attribute the query is interested on. It must
+          be a valid attribute of all the entities covered by the query scope.
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntityTypeAttributeValue'
+              example:
+                - entityId: Kitchen1
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 24.1
+                  - 25.3
+                  - 26.7
+                - entityId: Room2
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  values:
+                  - 21.01
+                  - 20.9
+                  - 21.02
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Not Found
+                description: No records were found for such query.
+  /types/{entityType}:
+    get:
+      tags:
+      - queries
+      summary: (To Be Implemented) History of N attributes of N entities of the same
+        type.
+      description: For example, query the average pressure, temperature and humidity
+        of this month in all the weather stations.
+      operationId: reporter.reporter.query_1TNENA
+      parameters:
+      - name: entityType
+        in: path
+        description: The entity type in which the query is restricted on. Used to
+          constraint the search to entities of this type, specially useful when the
+          entity id is not enough to uniquely identify an entity.
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: Optional. Comma-separated list of attribute names whose data
+          are to be included in the response. The attributes are retrieved in the
+          order specified by this parameter. If not specified, all attributes are
+          included in the response in arbitrary order.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntityType'
+              example:
+                entityType: Room
+                entities:
+                - entityId: Room1
+                  index:
+                  - 2018-01-05T15:44:34
+                  - 2018-01-06T15:44:59
+                  - 2018-01-07T15:44:59
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
+                - entityId: Room2
+                  index:
+                  - 2018-01-05T15:44:34
+                  - 2018-01-06T15:44:59
+                  - 2018-01-07T15:44:59
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
+        501:
+          description: Not implemented!
+          content: {}
+    delete:
+      tags:
+      - input
+      summary: Delete historical data of all entities of a certain type.
+      description: Given an entity type, delete all the historical records of all
+        entities of such type.
+      operationId: reporter.delete.delete_entities
+      parameters:
+      - name: entityType
+        in: path
+        description: The entity type in which the query is restricted on. Used to
+          constraint the search to entities of this type, specially useful when the
+          entity id is not enough to uniquely identify an entity.
+        required: true
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        204:
+          description: Records successfully deleted.
+          content: {}
+  /types/{entityType}/value:
+    get:
+      tags:
+      - queries
+      summary: (To Be Implemented) History of N attributes (values only) of N entities
+        of the same type.
+      description: For example, query the average pressure, temperature and humidity
+        (values only, no metadata) of this month in all the weather stations.
+      operationId: reporter.reporter.query_1TNENA_value
+      parameters:
+      - name: entityType
+        in: path
+        description: The entity type in which the query is restricted on. Used to
+          constraint the search to entities of this type, specially useful when the
+          entity id is not enough to uniquely identify an entity.
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: Optional. Comma-separated list of attribute names whose data
+          are to be included in the response. The attributes are retrieved in the
+          order specified by this parameter. If not specified, all attributes are
+          included in the response in arbitrary order.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedEntityTypeValue'
+              example:
+                - entityId: Room1
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
+                - entityId: Room2
+                  index:
+                  - "2018-01-05T15:44:34"
+                  - "2018-01-06T15:44:59"
+                  - "2018-01-07T15:44:59"
+                  attributes:
+                  - attrName: temperature
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - attrName: pressure
+                    values:
+                    - 1.1
+                    - 1.3
+                    - 0.7
+        501:
+          description: Not implemented!
+          content: {}
+  /attrs/{attrName}:
+    get:
+      tags:
+      - queries
+      summary: (To Be Implemented) History of an attribute of N entities of N types.
+      description: For example, query the average temperature of this month in all
+        the devices capable of measuring temperature. In this case, you are responsible
+        for providing entity types which contain the attrName.
+      operationId: reporter.reporter.query_NTNE1A
+      parameters:
+      - name: attrName
+        in: path
+        description: The name of the attribute the query is interested on. It must
+          be a valid attribute of all the entities covered by the query scope.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedAttribute'
+              example:
+                attrName: temperature
+                types:
+                - entityType: Room
+                  entities:
+                  - entityId: Room1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: Room2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
+                - entityType: Device
+                  entities:
+                  - entityId: DeviceInRoom1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: DeviceInRoom2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
+        501:
+          description: Not implemented!
+          content: {}
+  /attrs/{attrName}/value:
+    get:
+      tags:
+      - queries
+      summary: (To Be Implemented) History of an attribute (values only) of N entities
+        of N types.
+      description: For example, query the average temperature (values only, no metadata)
+        of this month in all the devices capable of measuring temperature. In this
+        case, you are reponsible for providing entity types which contain the attrName.
+      operationId: reporter.reporter.query_NTNE1A_value
+      parameters:
+      - name: attrName
+        in: path
+        description: The name of the attribute the query is interested on. It must
+          be a valid attribute of all the entities covered by the query scope.
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedAttributeValue'
+              example:
+                - entityType: Room
+                  entities:
+                  - entityId: Room1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: Room2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
+                - entityType: Device
+                  entities:
+                  - entityId: DeviceInRoom1
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 24.1
+                    - 25.3
+                    - 26.7
+                  - entityId: DeviceInRoom2
+                    index:
+                    - "2018-01-05T15:44:34"
+                    - "2018-01-06T15:44:59"
+                    - "2018-01-07T15:44:59"
+                    values:
+                    - 22.1
+                    - 23.3
+                    - 25.7
+        501:
+          description: Not implemented!
+          content: {}
+  /attrs:
+    get:
+      tags:
+      - queries
+      summary: (To Be Implemented) History of N attributes of N entities of N types.
+      description: This is sort of a query all. The response will likely not fit into
+        a single response so an efficient paging mechanism and sensible defaults will
+        be required.
+      operationId: reporter.reporter.query_NTNENA
+      parameters:
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: Optional. Comma-separated list of attribute names whose data
+          are to be included in the response. The attributes are retrieved in the
+          order specified by this parameter. If not specified, all attributes are
+          included in the response in arbitrary order.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedAllAttribute'
+              example:
+                - attrName: temperature
+                  types:
+                  - entityType: Room
+                    entities:
+                    - entityId: Room1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: Room2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
+                  - entityType: Device
+                    entities:
+                    - entityId: DeviceInRoom1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: DeviceInRoom2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
+        501:
+          description: Not implemented!
+          content: {}
+  /attrs/value:
+    get:
+      tags:
+      - queries
+      summary: (To Be Implemented) History of N attributes (values only) of N entities
+        of N types.
+      description: This is sort of a query all. The response will likely not fit into
+        a single response so an efficient paging mechanism and sensible defaults will
+        be required.
+      operationId: reporter.reporter.query_NTNENA_value
+      parameters:
+      - name: type
+        in: query
+        description: Comma-separated list of entity types whose data are to be included
+          in the response. Use only one (no comma) when required. If used to resolve
+          ambiguity for the given entityId, make sure the given entityId exists for
+          this entityType.
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: Optional. Comma-separated list of entity ids whose data are to
+          be included in the response.
+        schema:
+          type: string
+      - name: attrs
+        in: query
+        description: Optional. Comma-separated list of attribute names whose data
+          are to be included in the response. The attributes are retrieved in the
+          order specified by this parameter. If not specified, all attributes are
+          included in the response in arbitrary order.
+        schema:
+          type: string
+      - name: aggrMethod
+        in: query
+        description: Optional. The function to apply to the raw data filtered by the
+          query parameters. If not given, the returned data are the same raw inserted
+          data.
+        schema:
+          type: string
+          enum:
+          - count
+          - sum
+          - avg
+          - min
+          - max
+      - name: aggrPeriod
+        in: query
+        description: Optional. If not defined, the aggregation will apply to all the
+          values contained in the search result. If defined, the aggregation function
+          will instead be applied N times, once for each period, and all those results
+          will be considered for the response. For example, a query asking for the
+          average temperature of an attribute will typically return 1 value. However,
+          with an aggregationPeriod of day, you get the daily average of the temperature
+          instead (more than one value assuming you had measurements across many days
+          within the scope of your search result). aggrPeriod must be accompanied
+          by an aggrMethod, and the aggrMethod will be applied to all the numeric
+          attributes specified in attrs; the rest of the non-numerical attrs will
+          be ignored. By default, the response is grouped by entity_id. See aggrScope
+          to create aggregation across entities.
+        schema:
+          type: string
+          enum:
+          - year
+          - month
+          - day
+          - hour
+          - minute
+          - second
+      - name: aggrScope
+        in: query
+        description: Optional. (This parameter is not yet supported). When the query
+          results cover historical data for multiple entities instances, you can define
+          the aggregation method to be applied for each entity instance [entity] or
+          across them [global].
+        schema:
+          type: string
+          default: entity
+          enum:
+          - global
+          - entity
+      - name: options
+        in: query
+        description: 'Optional. (This parameter is not yet supported). Options dictionary
+          to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+        schema:
+          type: string
+          enum:
+          - keyValues
+          - values
+      - name: fromDate
+        in: query
+        description: Optional. The starting date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        description: Optional. The final date and time (inclusive) from which the
+          context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+        schema:
+          type: string
+      - name: lastN
+        in: query
+        description: Optional. Used to request only the last N values that satisfy
+          the request conditions.
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Optional. Maximum number of results to retrieve in a single response.
+        schema:
+          type: integer
+          default: 10000
+      - name: offset
+        in: query
+        description: Optional. Offset to apply to the response results. For example,
+          if the query was to return 10 results and you use an offset of 1, the response
+          will return the last 9 values. Make sure you don't give more offset than
+          the number of results.
+        schema:
+          type: integer
+      - name: georel
+        in: query
+        description: 'Optional. It specifies a spatial relationship between matching
+          entities and a reference shape (geometry). This parameter is used to perform
+          geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+          Full details can be found in the Geographical Queries section of the specification:
+          http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+          type: string
+      - name: geometry
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape to be used for geographical queries and has
+          the same semantics as in the FIWARE-NGSI v2 Specification. Full details
+          can be found in the Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          type: string
+          enum:
+          - point
+          - line
+          - polygon
+          - box
+      - name: coords
+        in: query
+        description: 'Optional but required if georel is specified. This parameter
+          defines the reference shape (geometry) in terms of WGS 84 coordinates and
+          has the same semantics as in the FIWARE-NGSI v2 Specification, except we
+          only accept coordinates in decimal degrees---e.g. `40.714,-74.006` is okay,
+          but not `40 42'' 51'''',74 0'' 21''''`. Full details can be found in the
+          Geographical Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+        schema:
+          pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+          type: string
+      - name: fiwareService
+        in: header
+        description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      - name: fiwareServicePath
+        in: header
+        description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedAllAttribute'
+              example:
+                - attrName: temperature
+                  types:
+                  - entityType: Room
+                    entities:
+                    - entityId: Room1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: Room2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
+                  - entityType: Device
+                    entities:
+                    - entityId: DeviceInRoom1
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 24.1
+                      - 25.3
+                      - 26.7
+                    - entityId: DeviceInRoom2
+                      index:
+                      - "2018-01-05T15:44:34"
+                      - "2018-01-06T15:44:59"
+                      - "2018-01-07T15:44:59"
+                      values:
+                      - 22.1
+                      - 23.3
+                      - 25.7
+        501:
+          description: Not implemented!
+          content: {}
+components:
+  schemas:
+    Version:
+      type: object
+      properties:
+        version:
+          type: string
+    NotImplemented:
+      type: string
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+        details:
+          type: object
+          properties: {}
+    ErrorResponse:
+      description: >-
+        Default error response contains an error code, and a description
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+        description:
+          type: string
+      example:
+        error: operation not supported
+        description: >- 
+          this implementation of NGSI v2 does not support the called operation
+    Entity:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The NGSI Entity Type.
+          example: Room
+        id:
+          type: string
+          description: The NGSI Entity Id.
+          example: Kitchen
+    IndexedEntity:
+      type: object
+      properties:
+        index:
+          $ref: '#/components/schemas/IndexArray'
+        entityId:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeValues'
+    IndexedEntityValue:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeValues'
+        index:
+          $ref: '#/components/schemas/IndexArray'    
+    IndexedEntityAttribute:
+      type: object
+      properties:
+        values:
+          $ref: '#/components/schemas/ValuesArray'
+        index:
+          $ref: '#/components/schemas/IndexArray'
+        entityId:
+          type: string
+        attrName:
+          type: string
+    IndexedEntityTypeAttribute:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityIndexedValues'
+        entityType:
+          type: string
+        attrName:
+          type: string
+    IndexedEntityTypeAttributeValue:          
+      type: array
+      items:
+        $ref: '#/components/schemas/EntityIndexedValues'
+    IndexedEntityType:
+      type: object
+      properties:
+        entities:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                $ref: '#/components/schemas/IndexArray'
+              entityId:
+                type: string
+              attributes:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AttributeValues'
+        entityType:
+          type: string
+    IndexedEntityTypeValue:
+      type: array
+      items:
+        type: object
+        properties:
+          index:
+            $ref: '#/components/schemas/IndexArray'
+          entityId:
+            type: string
+          attributes:
+            type: array
+            items:
+              $ref: '#/components/schemas/AttributeValues'
+    IndexedAttribute:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            type: object
+            properties:
+              entities:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EntityIndexedValues'
+              entityType:
+                type: string
+        attrName:
+          type: string
+    IndexedAttributeValue:
+      type: array
+      items:
+        type: object
+        properties:
+          entities:
+            type: array
+            items:
+              $ref: '#/components/schemas/EntityIndexedValues'
+          entityType:
+            type: string
+    IndexedAllAttribute:
+      type: array
+      items:
+        type: object
+        properties:
+          types:
+            type: array
+            items:
+              type: object
+              properties:
+                entities:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/EntityIndexedValues'
+                entityType:
+                  type: string
+          attrName:
+            type: string
+    IndexArray:
+      type: array
+      description: Array of the timestamps which are indexes of the response for the
+        requested data. It's a parallel array to 'values'. The timestamp will be in
+        the ISO8601 format (e.g. 2010-10-10T07:09:00.792) or in milliseconds since
+        epoch whichever format was used in the input (notification), but ALWAYS in
+        UTC. When using aggregation options, the format of this remains the same,
+        only the semantics will change. For example, if aggrPeriod is day, each index
+        will be a valid timestamp of a moment in the corresponding day.
+      items:
+        type: string
+    IndexedValues:
+      type: object
+      properties:
+        index:
+          $ref: '#/components/schemas/IndexArray'
+        values:
+          $ref: '#/components/schemas/ValuesArray'
+    AttributeValues:
+      type: object
+      properties:
+        attrName:
+          type: string
+        values:
+          $ref: '#/components/schemas/ValuesArray'
+    ValuesArray:
+      type: array
+      description: Array of values of the selected attribute, in the same corresponding
+        order of the 'index' array. When using aggregation options, the format of
+        this remains the same, only the semantics will change. For example, if aggrPeriod
+        is day, each value of course may not correspond to original measurements but
+        rather the aggregate of measurements in each day.
+    Notification:
+      required:
+      - data
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+          example: 5947d174793fe6f7eb5e3961
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+      example:
+        subscriptionId: 5947d174793fe6f7eb5e3961
+        data:
+        - id: Kitchen
+          type: Room
+          temperature:
+            value: 24.2
+            type: Number
+            metadata:
+              dateModified:
+                type: DateTime
+                value: "2017-06-19T11:46:45.00Z"
+        - id: Bedroom1
+          type: Room
+          temperature:
+            value: 26.4
+            type: Number
+            metadata:
+              dateModified:
+                type: DateTime
+                value: "2017-06-19T11:46:45.00Z"
+    EntityIndexedValues:
+      type: object
+      properties:
+        entityId:
+          type: string
+        index:
+          $ref: '#/components/schemas/IndexArray'
+        values:
+          $ref: '#/components/schemas/ValuesArray'
+  parameters:
+    offset:
+      name: offset
+      in: query
+      description: Optional. Offset to apply to the response results. For example,
+        if the query was to return 10 results and you use an offset of 1, the response
+        will return the last 9 values. Make sure you don't give more offset than the
+        number of results.
+      schema:
+        type: integer
+    toDate:
+      name: toDate
+      in: query
+      description: Optional. The final date and time (inclusive) from which the context
+        information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+      schema:
+        type: string
+    lastN:
+      name: lastN
+      in: query
+      description: Optional. Used to request only the last N values that satisfy the
+        request conditions.
+      schema:
+        type: integer
+    fiwareServicePath:
+      name: fiwareServicePath
+      in: header
+      description: The corresponding 'fiware-servicepath' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+      schema:
+        type: string
+    entityIdInPath:
+      name: entityId
+      in: path
+      description: The entity id in which the query is restricted on. If the id is
+        unique among all entity types, this could be used to uniquely identify the
+        entity instance. Otherwise, you will have to use the entityType attribute
+        to resolve ambiguity.
+      required: true
+      schema:
+        type: string
+    type:
+      name: type
+      in: query
+      description: Comma-separated list of entity types whose data are to be included
+        in the response. Use only one (no comma) when required. If used to resolve
+        ambiguity for the given entityId, make sure the given entityId exists for
+        this entityType.
+      schema:
+        type: string
+    idPattern:
+      name: idPattern
+      in: query
+      description: A correctly formated regular expression. Retrieve entities whose
+        ID matches the regular expression. Incompatible with id.
+      schema:
+        type: string
+    attrNameInPath:
+      name: attrName
+      in: path
+      description: The name of the attribute the query is interested on. It must be
+        a valid attribute of all the entities covered by the query scope.
+      required: true
+      schema:
+        type: string
+    georel:
+      name: georel
+      in: query
+      description: 'Optional. It specifies a spatial relationship between matching
+        entities and a reference shape (geometry). This parameter is used to perform
+        geographical queries with the same semantics as in the FIWARE-NGSI v2 Specification.
+        Full details can be found in the Geographical Queries section of the specification:
+        http://fiware.github.io/specifications/ngsiv2/stable/.'
+      schema:
+        pattern: ^coveredBy$|^intersects$|^equals$|^disjoint$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$|^near;minDistance:(0|([1-9][0-9]*))(\.[0-9]+)?;maxDistance:(0|([1-9][0-9]*))(\.[0-9]+)?$
+        type: string
+    attrs:
+      name: attrs
+      in: query
+      description: Optional. Comma-separated list of attribute names whose data are
+        to be included in the response. The attributes are retrieved in the order
+        specified by this parameter. If not specified, all attributes are included
+        in the response in arbitrary order.
+      schema:
+        type: string
+    fromDate:
+      name: fromDate
+      in: query
+      description: Optional. The starting date and time (inclusive) from which the
+        context information is queried. Must be in ISO8601 format (e.g., 2018-01-05T15:44:34)
+      schema:
+        type: string
+    aggrScope:
+      name: aggrScope
+      in: query
+      description: Optional. (This parameter is not yet supported). When the query
+        results cover historical data for multiple entities instances, you can define
+        the aggregation method to be applied for each entity instance [entity] or
+        across them [global].
+      schema:
+        type: string
+        default: entity
+        enum:
+        - global
+        - entity
+    aggrMethod:
+      name: aggrMethod
+      in: query
+      description: Optional. The function to apply to the raw data filtered by the
+        query parameters. If not given, the returned data are the same raw inserted
+        data.
+      schema:
+        type: string
+        enum:
+        - count
+        - sum
+        - avg
+        - min
+        - max
+    fiwareService:
+      name: fiwareService
+      in: header
+      description: The corresponding 'fiware-service' header. See http://fiware-orion.readthedocs.io/en/latest/user/multitenancy/index.html#multi-tenancy
+      schema:
+        type: string
+    aggrPeriod:
+      name: aggrPeriod
+      in: query
+      description: Optional. If not defined, the aggregation will apply to all the
+        values contained in the search result. If defined, the aggregation function
+        will instead be applied N times, once for each period, and all those results
+        will be considered for the response. For example, a query asking for the average
+        temperature of an attribute will typically return 1 value. However, with an
+        aggregationPeriod of day, you get the daily average of the temperature instead
+        (more than one value assuming you had measurements across many days within
+        the scope of your search result). aggrPeriod must be accompanied by an aggrMethod,
+        and the aggrMethod will be applied to all the numeric attributes specified
+        in attrs; the rest of the non-numerical attrs will be ignored. By default,
+        the response is grouped by entity_id. See aggrScope to create aggregation
+        across entities.
+      schema:
+        type: string
+        enum:
+        - year
+        - month
+        - day
+        - hour
+        - minute
+        - second
+    options:
+      name: options
+      in: query
+      description: 'Optional. (This parameter is not yet supported). Options dictionary
+        to format output. See definition in NGSIv2 for example here: https://orioncontextbroker.docs.apiary.io/#reference/entities/list-entities/list-entities'
+      schema:
+        type: string
+        enum:
+        - keyValues
+        - values
+    limit:
+      name: limit
+      in: query
+      description: Optional. Maximum number of results to retrieve in a single response.
+      schema:
+        type: integer
+        default: 10000
+    geometry:
+      name: geometry
+      in: query
+      description: 'Optional but required if georel is specified. This parameter defines
+        the reference shape to be used for geographical queries and has the same semantics
+        as in the FIWARE-NGSI v2 Specification. Full details can be found in the Geographical
+        Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+      schema:
+        type: string
+        enum:
+        - point
+        - line
+        - polygon
+        - box
+    id:
+      name: id
+      in: query
+      description: Optional. Comma-separated list of entity ids whose data are to
+        be included in the response.
+      schema:
+        type: string
+    coords:
+      name: coords
+      in: query
+      description: 'Optional but required if georel is specified. This parameter defines
+        the reference shape (geometry) in terms of WGS 84 coordinates and has the
+        same semantics as in the FIWARE-NGSI v2 Specification, except we only accept
+        coordinates in decimal degrees---e.g. `40.714,-74.006` is okay, but not `40
+        42'' 51'''',74 0'' 21''''`. Full details can be found in the Geographical
+        Queries section of the specification: http://fiware.github.io/specifications/ngsiv2/stable/.'
+      schema:
+        pattern: ^[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?(;[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?,[+,-]?(0|([1-9][0-9]*))(\.[0-9]+)?)*$
+        type: string
+    entityTypeInPath:
+      name: entityType
+      in: path
+      description: The entity type in which the query is restricted on. Used to constraint
+        the search to entities of this type, specially useful when the entity id is
+        not enough to uniquely identify an entity.
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: X-Gravitee-Api-Key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

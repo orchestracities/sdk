@@ -6,5 +6,5 @@ do
   echo "Processing $f file..."
   docker run \
     -v ${PWD}:/local \
-    wework/speccy lint "/local/$f"
+    wework/speccy lint "/local/$f" --skip openapi-tags-alphabetical
 done
