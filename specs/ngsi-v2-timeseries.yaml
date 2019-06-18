@@ -3001,8 +3001,6 @@ components:
         this remains the same, only the semantics will change. For example, if aggrPeriod
         is day, each value of course may not correspond to original measurements but
         rather the aggregate of measurements in each day.
-      items:
-        type: number
     Notification:
       required:
       - data
