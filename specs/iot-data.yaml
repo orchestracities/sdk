@@ -2,7 +2,7 @@ openapi: 3.0.1
 tags:
   - name: input
 info:
-  title: iot-data
+  title: iot_data
   description: IoT Data
   version: 1.9.0
   contact:
