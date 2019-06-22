@@ -1,0 +1,135 @@
+openapi: 3.0.1
+tags:
+  - name: input
+info:
+  title: iot_data
+  description: IoT Data
+  version: 1.9.0
+  contact:
+    name: OrchestraCities
+    url: https://www.orchestracities.com
+    email: info@orchestracities.com
+  license:
+    name: Apache 2.0
+    url: https://github.com/orchestracities/sdk/blob/master/LICENSE
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+servers:
+  - url: https://api.s.orchestracities.com/iot/data
+paths:
+  /ul:
+    post:
+      tags:
+      - input
+      summary: "Send data to a device using UL2.0"
+      operationId: ul-data
+      parameters:
+      - name: i
+        in: query
+        description: Device ID (unique for the API Key).
+        required: true
+        schema:
+          type: string
+      - name: k
+        in: query
+        description: API Key for the service the device is registered on.
+        required: true
+        schema:
+          type: string
+      - name: t
+        in: query
+        description: Timestamp of the measure. Will override the automatic IoTAgent timestamp (optional).
+        schema:
+          type: string
+      requestBody:
+        description: >- 
+          The payload for information update requests is composed of
+          a list of key-value pairs separated by the `|` character.
+          E.g.: `t|15|k|abc|z|true` In this example, two attributes, one
+          named "t" with value "15" and another named "k" with value
+          "abc" are transmitted. NGSI v2 update uses 15 (number),
+          abc (string), and true (boolean). This functionality
+          relies on string measures casting feature implemented in
+          the iotagent library. In addition, the device has to be
+          provisioned using the right types for the attributes to be
+          cast, which are:
+            * Type `Text` for sting
+            * Type `Number` for integer or float numbers
+            * Type `Boolean` for boolean
+            * Type `None` for null.
+          
+          Commands syntax is as follows: `<device name>@<command name>|<command value>`.
+          
+          
+          Additional information are available at [https://fiware-iotagent-ul.rtfd.io/](https://fiware-iotagent-ul.rtfd.io/)
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+            example:
+              t|15|k|abc|z|true
+      responses:
+        '2XX':
+          description: ""
+  /json:
+    post:
+      tags:
+      - input
+      summary: "Send data to a device using JSON"
+      operationId: json-data
+      parameters:
+      - name: i
+        in: query
+        description: Device ID (unique for the API Key).
+        required: true
+        schema:
+          type: string
+      - name: k
+        in: query
+        description: API Key for the service the device is registered on.
+        required: true
+        schema:
+          type: string
+      - name: t
+        in: query
+        description: Timestamp of the measure. Will override the automatic IoTAgent timestamp (optional).
+        schema:
+          type: string
+      requestBody:
+        description: >- 
+          The payload consists of a simple plain JSON object, where
+          each attribute of the object will be mapped to an
+          attribute in the NGSI entity. By "plain JSON objects"
+          or "single-level JSON objects" we mean:
+          
+            - valid JSON objects serialized as unescaped strings.
+            - JSON objects with a single level, i.e.: all the first level attributes of the JSON object are Strings or Numbers (not arrays or other objects).
+          
+          
+          Additional information are available at [https://fiware-iotagent-json.rtfd.io/](https://fiware-iotagent-json.rtfd.io/)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnyValue'
+            example:
+              h: "string"
+              t: 23
+              l: true
+      responses:
+        '2XX':
+          description: ""
+components:
+  schemas:
+    AnyValue: {}
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: X-Gravitee-Api-Key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
